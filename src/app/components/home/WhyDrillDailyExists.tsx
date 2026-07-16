@@ -73,6 +73,13 @@ export default function WhyDrillDailyExists() {
 
             <Grid container spacing={4} sx={{ alignItems: "center" }}>
               <Grid size={{ xs: 12, sm: 7 }}>
+                <Typography
+                  variant="body2"
+                  color="text.secondary"
+                  sx={{ mb: 2, fontWeight: 700 }}
+                >
+                  Drill Daily solves this by offering:
+                </Typography>
                 <Stack spacing={2}>
                   {points.map((point) => (
                     <Stack
