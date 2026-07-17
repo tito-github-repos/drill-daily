@@ -1,0 +1,1170 @@
+/* =========================================================
+   Hero Section
+   NOTE: All colors below are hardcoded (no CSS custom
+   properties like var(--primary)) so this file renders
+   identically regardless of what your project's global
+   stylesheet does or doesn't define at :root.
+   ========================================================= */
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 64px;
+  padding: 48px 96px;
+  background: linear-gradient(135deg, #f4fbf6 0%, #eef6ff 100%);
+  overflow: hidden;
+}
+
+.content {
+  flex: 0 0 42%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  max-width: 600px;
+}
+
+.eyebrow {
+  color: #16a34a !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  font-size: 0.9rem !important;
+  margin-bottom: 18px !important;
+}
+
+.heading {
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  line-height: 1.1 !important;
+  letter-spacing: -1px !important;
+  font-size: clamp(2.8rem, 5vw, 4.3rem) !important;
+  margin-bottom: 28px !important;
+}
+
+.highlight {
+  color: #16a34a;
+}
+
+.description {
+  color: #475569 !important;
+  font-size: 1.15rem !important;
+  line-height: 1.8 !important;
+  max-width: 500px;
+}
+
+/* ---------- Hero Image ---------- */
+
+.imageWrapper {
+  flex: 0 0 58%;
+  position: relative;
+  width: 640px;
+  height: 520px;
+  border-radius: 24px;
+  overflow: hidden;
+
+  box-shadow: 0 30px 70px rgba(15, 23, 42, 0.12);
+
+  animation: floatHero 6s ease-in-out infinite;
+}
+
+.image {
+  object-fit: cover;
+}
+
+@keyframes floatHero {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1024px) {
+  .hero {
+    padding: 48px 48px;
+    gap: 40px;
+  }
+
+  .heading {
+    font-size: 3rem !important;
+  }
+
+  .imageWrapper {
+    flex: 0 0 auto;
+    width: 500px;
+    height: 430px;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 900px) {
+  .hero {
+    flex-direction: column;
+    text-align: center;
+    padding: 56px 24px;
+    gap: 36px;
+  }
+
+  .content {
+    flex: 0 0 auto;
+    order: 1;
+    align-items: center;
+    max-width: 100%;
+  }
+
+  .imageWrapper {
+    flex: 0 0 auto;
+    order: 2;
+    width: 100%;
+    max-width: 480px;
+    height: 360px;
+    margin: 0 auto;
+  }
+
+  .description {
+    max-width: 100%;
+  }
+}
+
+/* ---------- Small Mobile ---------- */
+
+@media (max-width: 600px) {
+  .hero {
+    padding: 40px 20px;
+    gap: 28px;
+  }
+
+  .heading {
+    font-size: 2.2rem !important;
+  }
+
+  .description {
+    font-size: 1rem !important;
+  }
+
+  .imageWrapper {
+    flex: 0 0 auto;
+    width: 100%;
+    max-width: 360px;
+    height: 270px;
+    border-radius: 18px;
+  }
+}
+
+/* =========================================================
+   OUR LEARNING APPROACH
+   ========================================================= */
+
+.approachSection {
+  width: 100%;
+  padding: 56px 32px 40px;
+  background: #ffffff;
+}
+
+.approachHeader {
+  text-align: center;
+  max-width: 760px;
+  margin: 0 auto 40px;
+}
+
+.approachEyebrow {
+  color: #16a34a !important;
+  font-weight: 700 !important;
+  letter-spacing: 2px !important;
+  font-size: 0.85rem !important;
+  display: block;
+}
+
+.approachHeading {
+  margin-top: 10px !important;
+  font-size: 2.35rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+
+.approachUnderline {
+  width: 70px;
+  height: 4px;
+  margin: 18px auto 0;
+  background: #16a34a;
+  border-radius: 50px;
+}
+
+/* ---------- Card ---------- */
+
+.approachCard {
+  max-width: 1280px;
+  margin: auto;
+  padding: 40px;
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 24px;
+  box-shadow: 0 10px 35px rgba(15, 23, 42, 0.05);
+}
+
+/* ---------- Grid ---------- */
+
+.approachGrid {
+  display: grid;
+  grid-template-columns: 42% 58%;
+  gap: 44px;
+  align-items: start;
+}
+
+/* =========================================================
+   Timeline
+   ========================================================= */
+
+.timeline {
+  display: flex;
+  flex-direction: column;
+  padding-top: 8px;
+}
+
+.timelineItem {
+  display: flex;
+  gap: 18px;
+}
+
+.timelineIconCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.iconCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: #e8f9ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.icon {
+  color: #16a34a !important;
+  font-size: 22px !important;
+}
+
+.connector {
+  flex: 1;
+  min-height: 32px;
+  width: 2px;
+  margin: 8px 0;
+
+  background: repeating-linear-gradient(
+    to bottom,
+    #22c55e 0px,
+    #22c55e 7px,
+    transparent 7px,
+    transparent 13px
+  );
+
+  opacity: 0.55;
+}
+
+.timelineText {
+  padding-bottom: 22px;
+}
+
+.itemTitle {
+  font-size: 1.08rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 4px !important;
+}
+
+.itemDescription {
+  color: #64748b !important;
+  font-size: 0.92rem !important;
+  line-height: 1.6 !important;
+}
+
+/* =========================================================
+   Right Side
+   ========================================================= */
+
+.rightCol {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+  gap: 16px;
+}
+
+.approachImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 320px;
+  border-radius: 18px;
+  overflow: hidden;
+
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+}
+
+/* =========================================================
+   Commitment
+   ========================================================= */
+
+.commitment {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+
+  background: #e8f9ef;
+
+  border-radius: 18px;
+
+  padding: 26px;
+
+  min-height: 140px;
+
+  border: 1px solid rgba(22, 163, 74, 0.08);
+}
+
+.commitmentIconCircle {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background: #ffffff;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  flex-shrink: 0;
+}
+
+.commitmentIcon {
+  color: #16a34a !important;
+  font-size: 26px !important;
+}
+
+.commitmentTitle {
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 6px !important;
+}
+
+.commitmentText {
+  color: #475569 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.7 !important;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1024px) {
+  .approachCard {
+    padding: 32px;
+  }
+
+  .approachGrid {
+    gap: 32px;
+  }
+
+  .approachImageWrapper {
+    height: 300px;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 900px) {
+  .approachSection {
+    padding: 48px 20px;
+  }
+
+  .approachGrid {
+    grid-template-columns: 1fr;
+    gap: 32px;
+  }
+
+  .timeline {
+    max-width: 100%;
+  }
+
+  .approachImageWrapper {
+    height: 260px;
+  }
+
+  .commitment {
+    padding: 22px;
+  }
+}
+
+/* ---------- Small Mobile ---------- */
+
+@media (max-width: 600px) {
+  .approachCard {
+    padding: 22px;
+    border-radius: 18px;
+  }
+
+  .approachHeading {
+    font-size: 1.7rem !important;
+  }
+
+  .iconCircle,
+  .commitmentIconCircle {
+    width: 44px;
+    height: 44px;
+  }
+
+  .icon,
+  .commitmentIcon {
+    font-size: 20px !important;
+  }
+
+  .commitment {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .approachImageWrapper {
+    height: 210px;
+  }
+}
+
+@media (max-width: 375px) {
+  .approachHeading {
+    font-size: 1.45rem !important;
+  }
+
+  .itemTitle {
+    font-size: 0.98rem !important;
+  }
+
+  .itemDescription {
+    font-size: 0.85rem !important;
+  }
+}
+
+/* =========================================================
+   CLASS STRUCTURE
+   ========================================================= */
+
+.structureSection {
+  width: 100%;
+  padding: 32px 32px 40px;
+  background: #ffffff;
+}
+
+.structureOuterCard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fafcfb 0%, #f5f8fb 100%);
+  border: 1px solid #edf2f7;
+}
+
+/* ---------- Header (left aligned, shared by Structure & Experience) ---------- */
+
+.structureHeader {
+  margin-bottom: 22px;
+}
+
+.structureHeaderRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.structureHeaderIcon {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: #e8f9ef;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.structureHeading {
+  font-size: 1.5rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+}
+
+.structureDescription {
+  color: #64748b !important;
+  font-size: 0.94rem !important;
+  margin-left: 46px;
+}
+
+/* ---------- Grid ---------- */
+
+.structureGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* ---------- Card ---------- */
+
+.classCard {
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.oneToOneCard {
+  background: rgba(30, 184, 90, 0.06);
+}
+
+.groupCard {
+  background: rgba(37, 99, 235, 0.06);
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 24px;
+}
+
+.cardContent {
+  flex: 1 1 48%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.cardTitleRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.cardTitleTextCol {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.cardIcon {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  background: #16a34a;
+  color: #ffffff;
+}
+
+.groupCard .cardIcon {
+  background: #2563eb;
+}
+
+.cardTitle {
+  font-size: 1.05rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  white-space: nowrap;
+  line-height: 1.3 !important;
+}
+
+.cardSubtitle {
+  font-size: 0.78rem !important;
+  color: #64748b !important;
+  font-weight: 500 !important;
+  white-space: nowrap;
+  margin-top: 1px !important;
+}
+
+.featureList {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.featureItem {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.featureIcon {
+  font-size: 18px !important;
+  color: #16a34a !important;
+  flex-shrink: 0;
+}
+
+.groupCard .featureIcon {
+  color: #2563eb !important;
+}
+
+.featureText {
+  font-size: 0.9rem !important;
+  color: #334155 !important;
+  font-weight: 500 !important;
+}
+
+.cardImage {
+  position: relative;
+  flex: 1 1 52%;
+  align-self: stretch;
+  min-height: 260px;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.cardImg {
+  object-fit: cover;
+  object-position: center;
+}
+
+/* ---------- Tablet ---------- */
+
+@media (max-width: 1024px) {
+  .structureOuterCard {
+    padding: 24px;
+  }
+
+  .cardTop {
+    padding: 20px;
+    gap: 14px;
+  }
+
+  .cardTitle {
+    font-size: 1rem !important;
+    white-space: normal;
+  }
+
+  .cardSubtitle {
+    white-space: normal;
+  }
+
+  .cardImage {
+    min-height: 220px;
+  }
+}
+
+/* ---------- Mobile ---------- */
+
+@media (max-width: 900px) {
+  .structureSection {
+    padding: 24px 20px 32px;
+  }
+
+  .structureOuterCard {
+    padding: 20px;
+  }
+
+  .structureGrid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .cardTop {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .cardTitle,
+  .cardSubtitle {
+    white-space: normal;
+  }
+
+  .cardImage {
+    min-height: 220px;
+    margin-top: 8px;
+  }
+
+  .structureDescription {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .cardImg {
+    object-fit: contain;   /* full illustration visible, nothing cropped */
+  }
+
+  .cardImage {
+    min-height: 240px;     /* slightly taller so contain doesn't look too small */
+  }
+}
+
+/* ---------- Small Mobile ---------- */
+
+@media (max-width: 600px) {
+  .structureOuterCard {
+    padding: 16px;
+    border-radius: 16px;
+  }
+
+  .structureHeading {
+    font-size: 1.3rem !important;
+  }
+
+  .cardTop {
+    padding: 18px;
+  }
+
+  .cardIcon {
+    width: 42px;
+    height: 42px;
+  }
+
+  .cardImage {
+    min-height: 180px;
+  }
+}
+
+/* =========================================================
+   OUR CLASS EXPERIENCE
+   ========================================================= */
+
+.experienceSection {
+  width: 100%;
+  padding: 0 32px 40px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+}
+
+.experienceOuterCard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 28px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #fafcfb 0%, #f5f8fb 100%);
+  border: 1px solid #edf2f7;
+}
+
+.experienceGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+
+.experienceCard {
+  border-radius: 16px;
+  padding: 24px 20px;
+  text-align: center;
+  border: 1px solid rgba(15, 23, 42, 0.04);
+}
+
+.experienceIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 14px;
+  margin: 0 auto 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+}
+
+.experienceTitle {
+  font-size: 0.98rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 6px !important;
+}
+
+.experienceText {
+  font-size: 0.84rem !important;
+  color: #64748b !important;
+  line-height: 1.55 !important;
+}
+
+.experienceCard.green {
+  background: rgba(30, 184, 90, 0.08);
+}
+.experienceCard.green .experienceIcon,
+.experienceCard.green .experienceTitle {
+  color: #16a34a !important;
+}
+
+.experienceCard.blue {
+  background: rgba(37, 99, 235, 0.08);
+}
+.experienceCard.blue .experienceIcon,
+.experienceCard.blue .experienceTitle {
+  color: #2563eb !important;
+}
+
+.experienceCard.orange {
+  background: rgba(217, 119, 6, 0.1);
+}
+.experienceCard.orange .experienceIcon,
+.experienceCard.orange .experienceTitle {
+  color: #d97706 !important;
+}
+
+.experienceCard.purple {
+  background: rgba(147, 51, 234, 0.08);
+}
+.experienceCard.purple .experienceIcon,
+.experienceCard.purple .experienceTitle {
+  color: #9333ea !important;
+}
+
+/* =========================================================
+   WHO CAN JOIN / HOW TO JOIN
+   ========================================================= */
+
+.joinSection {
+  width: 100%;
+  padding: 0 32px 40px;
+  background: #ffffff;
+  border-top: 1px solid #f1f5f9;
+}
+
+.joinOuterCard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 20px;
+  background: #fafbfc;
+  border: 1px solid #edf2f7;
+}
+
+.joinGrid {
+  display: grid;
+  grid-template-columns: 1.7fr 1fr;
+  gap: 36px;
+  align-items: start;
+}
+
+.joinLeftCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  align-items: stretch;
+}
+
+.joinColInner {
+  display: flex;
+  flex-direction: column;
+}
+
+.joinRightCol {
+  display: flex;
+  flex-direction: column;
+}
+
+.joinHeading {
+  font-size: 1.2rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 8px !important;
+}
+
+.joinUnderline {
+  width: 44px;
+  height: 3px;
+  background: #16a34a;
+  border-radius: 50px;
+  margin-bottom: 20px;
+}
+
+.joinList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.joinListItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.joinListIcon {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #e8f9ef;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.joinListTitle {
+  font-size: 0.92rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 2px !important;
+}
+
+.joinListText {
+  font-size: 0.82rem !important;
+  color: #64748b !important;
+  line-height: 1.45 !important;
+}
+
+.joinImageWrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;      
+  min-height: 300px;  
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 10px 28px rgba(15, 23, 42, 0.08);
+}
+
+.stepsList {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.stepItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+}
+
+.stepNumber {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #16a34a;
+  color: #ffffff;
+  font-size: 0.78rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.stepIconCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #e8f9ef;
+  color: #16a34a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* =========================================================
+   STUDENT DASHBOARD FEATURES
+   (now uses the same 4-color rotation as "Our Class
+   Experience" so it doesn't look flat / monochrome)
+   ========================================================= */
+
+.dashboardSection {
+  width: 100%;
+  padding: 40px 32px 56px;
+  background: #f8fafc;
+}
+
+.dashboardOuterCard {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 32px;
+  border-radius: 20px;
+  background: #ffffff;
+  border: 1px solid #edf2f7;
+}
+
+.dashboardHeader {
+  text-align: center;
+  max-width: 700px;
+  margin: 0 auto 28px;
+}
+
+.dashboardHeading {
+  font-size: 1.7rem !important;
+  font-weight: 800 !important;
+  color: #0f172a !important;
+  margin-bottom: 8px !important;
+}
+
+.dashboardDescription {
+  color: #64748b !important;
+  font-size: 0.95rem !important;
+}
+
+.dashboardGrid {
+  max-width: 1280px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
+}
+
+.dashboardCard {
+  border: 1px solid rgba(15, 23, 42, 0.04);
+  border-radius: 16px;
+  padding: 22px 18px;
+}
+
+.dashboardIcon {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 12px;
+}
+
+.dashboardCardTitle {
+  font-size: 0.94rem !important;
+  font-weight: 700 !important;
+  color: #0f172a !important;
+  margin-bottom: 5px !important;
+}
+
+.dashboardCardText {
+  font-size: 0.82rem !important;
+  color: #64748b !important;
+  line-height: 1.55 !important;
+}
+
+.dashboardCard.green {
+  background: rgba(30, 184, 90, 0.08);
+}
+.dashboardCard.green .dashboardIcon,
+.dashboardCard.green .dashboardCardTitle {
+  color: #16a34a !important;
+}
+
+.dashboardCard.blue {
+  background: rgba(37, 99, 235, 0.08);
+}
+.dashboardCard.blue .dashboardIcon,
+.dashboardCard.blue .dashboardCardTitle {
+  color: #2563eb !important;
+}
+
+.dashboardCard.orange {
+  background: rgba(217, 119, 6, 0.1);
+}
+.dashboardCard.orange .dashboardIcon,
+.dashboardCard.orange .dashboardCardTitle {
+  color: #d97706 !important;
+}
+
+.dashboardCard.purple {
+  background: rgba(147, 51, 234, 0.08);
+}
+.dashboardCard.purple .dashboardIcon,
+.dashboardCard.purple .dashboardCardTitle {
+  color: #9333ea !important;
+}
+
+/* =========================================================
+   RESPONSIVE — Tablet
+   ========================================================= */
+
+@media (max-width: 1024px) {
+  .experienceGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .joinGrid {
+    grid-template-columns: 1fr;
+    gap: 28px;
+  }
+
+  .joinLeftCol {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .dashboardGrid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Mobile
+   ========================================================= */
+
+@media (max-width: 900px) {
+  .experienceSection,
+  .joinSection {
+    padding: 0 20px 32px;
+  }
+
+  .experienceOuterCard {
+    padding: 22px;
+  }
+
+  .experienceGrid {
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .joinOuterCard {
+    padding: 22px;
+  }
+
+  .joinLeftCol {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .joinImageWrapper {
+    min-height: 220px;
+  }
+
+  .dashboardSection {
+    padding: 32px 20px 40px;
+  }
+
+  .dashboardOuterCard {
+    padding: 22px;
+  }
+
+  .dashboardGrid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* =========================================================
+   RESPONSIVE — Small Mobile
+   ========================================================= */
+
+@media (max-width: 600px) {
+  .experienceGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .dashboardHeading {
+    font-size: 1.4rem !important;
+  }
+
+  .joinHeading {
+    font-size: 1.1rem !important;
+  }
+
+  .joinOuterCard {
+    padding: 18px;
+    border-radius: 16px;
+  }
+}
