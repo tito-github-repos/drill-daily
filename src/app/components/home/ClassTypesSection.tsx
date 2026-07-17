@@ -276,7 +276,7 @@ export default function ClassTypesSection() {
             {/* Explore button linking out, with arrow icon */}
             <Box
               component="a"
-              href="https://example.com/mental-calisthenics"
+              href="https://2212.co.in/"
               target="_blank"
               rel="noopener noreferrer"
               sx={{
