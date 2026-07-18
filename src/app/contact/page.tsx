@@ -298,7 +298,7 @@ function ContactInfoSection() {
   const contactRows = [
     {
       icon: Phone,
-      title: "Contact & Payment (GPay)",
+      title: "Contact",
       detail: "+91 9999532356",
       iconBg: "var(--primary-light)",
       iconColor: "var(--primary)",
@@ -354,7 +354,7 @@ function ContactInfoSection() {
             sx={cardSx}
           >
             <Typography sx={{ fontSize: "26px", fontWeight: 800, color: "var(--black)", mb: 1.25 }}>
-              Get in Touch
+              Register
             </Typography>
             <Box sx={{ width: 36, height: 3, background: "var(--primary)", borderRadius: "999px", mb: 2 }} />
             <Typography sx={{ fontSize: "14.5px", color: "var(--black)", opacity: 0.6, lineHeight: 1.6, mb: 3.25 }}>

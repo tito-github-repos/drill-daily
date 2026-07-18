@@ -284,13 +284,19 @@ export default function Header() {
 
             <div style={styles.ctaWrap}>
               <Link
-                href="/get-in-touch"
+                href="/#register-form"
                 style={styles.cta}
                 onMouseEnter={() => setCtaHover(true)}
                 onMouseLeave={() => setCtaHover(false)}
-                onClick={() => setMenuOpen(false)}
+                onClick={(e) => {
+                    setMenuOpen(false);
+                    if (pathname === "/") {
+                        e.preventDefault();
+                        document.getElementById("register-form")?.scrollIntoView({ behavior: "smooth" });
+                    }
+                }}
               >
-                GET IN TOUCH
+                Register
                 <ArrowRight size={15} strokeWidth={2.2} style={styles.ctaArrow} />
               </Link>
             </div>
