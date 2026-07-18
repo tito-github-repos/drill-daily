@@ -74,7 +74,7 @@ export const registrationSchema = yup.object({
     .string()
     .trim()
     .required("Last name is required")
-    .min(3, "Last name must be at least 3 characters"),
+    .min(1, "Last name must be at least 1 characters"),
   email: yup
     .string()
     .trim()
