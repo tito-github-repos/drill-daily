@@ -20,127 +20,28 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from "next/image";
-
-const courseOptions: Record<string, string[]> = {
-  "job-exams": [
-    "UPSC",
-    "SSC",
-    "RBI",
-    "NDA",
-    "AFCAT",
-    "CDSE",
-    "CAPF",
-    "IBPS",
-    "PO",
-    "RRB",
-  ],
-  "higher-education": [
-    "NEET",
-    "NID",
-    "NIFT",
-    "UCEED",
-    "CLAT",
-    "IPM",
-    "IIT-JEE",
-    "CUET",
-    "NATA",
-  ],
-  "abroad-education": [
-    "GMAT",
-    "LSAT",
-    "Mathematics",
-    "GRE",
-    "SAT",
-    "IELTS",
-    "TOEFL",
-  ],
-};
-
-type FormState = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  courseCategory: string;
-  preferredCourses: string[];
-  classType: string;
-  classMode: string;
-  preferredTime: string;
-  goals: string;
-};
-
-const initialState: FormState = {
-  firstName: "",
-  lastName: "",
-  email: "",
-  phone: "",
-  courseCategory: "",
-  preferredCourses: [],
-  classType: "",
-  classMode: "",
-  preferredTime: "",
-  goals: "",
-};
-
-// ---- Yup schema ----
-const schema = yup.object({
-  firstName: yup
-    .string()
-    .trim()
-    .required("First name is required")
-    .test(
-      "min-name",
-      "First name must be at least 3 characters",
-      (value) => !value || value.length >= 3,
-    ),
-  lastName: yup
-    .string()
-    .trim()
-    .required("Last name is required")
-    .test(
-      "min-name",
-      "Last name must be at least 3 characters",
-      (value) => !value || value.length >= 3,
-    ),
-  email: yup
-    .string()
-    .trim()
-    .required("Email is required")
-    .test("email-validation", "Enter a valid email address", (value) => {
-      if (!value || value.trim() === "") return true;
-
-      return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
-    }),
-  phone: yup
-    .string()
-    .required("Phone number is required")
-    .matches(/^[6-9]\d{9}$/, "Enter a valid 10-digit phone number"),
-  courseCategory: yup.string().required("Please select a course category"),
-  preferredCourses: yup
-    .array()
-    .of(yup.string())
-    .min(1, "Select at least one preferred class"),
-  classType: yup.string().required("Please select a class type"),
-  classMode: yup.string().required("Please select a class mode"),
-  preferredTime: yup.string().required("Please select a preferred class time"),
-  goals: yup.string().optional(),
-});
-
-type FormErrors = Partial<Record<keyof FormState, string>>;
+import {
+  courseOptions,
+  registrationSchema,
+  initialState,
+  type FormState,
+  type FormErrors,
+} from "@/lib/validations/registration";
 
 export default function RegistrationForm() {
   const [form, setForm] = useState<FormState>(initialState);
   const [errors, setErrors] = useState<FormErrors>({});
   const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [apiError, setApiError] = useState("");
+  const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
 
-  // Validate a single field against the schema, using the latest form values
   const validateField = async (
     field: keyof FormState,
     updatedForm: FormState,
   ) => {
     try {
-      await schema.validateAt(field, updatedForm);
+      await registrationSchema.validateAt(field, updatedForm);
       setErrors((prev) => ({ ...prev, [field]: undefined }));
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -184,7 +85,7 @@ export default function RegistrationForm() {
     e.preventDefault();
 
     try {
-      await schema.validate(form, { abortEarly: false });
+      await registrationSchema.validate(form, { abortEarly: false });
       setErrors({});
     } catch (err) {
       if (err instanceof yup.ValidationError) {
@@ -203,20 +104,31 @@ export default function RegistrationForm() {
 
     setSubmitting(true);
     setStatus("idle");
+    setApiError("");
 
     try {
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          firstName: form.firstName.trim(),
+          lastName: form.lastName.trim(),
+          email: form.email.trim().toLowerCase(),
+          goals: form.goals.trim(),
+        }),
       });
 
-      if (!res.ok) throw new Error("Request failed");
+      const data = await res.json();
+
+      if (!res.ok) throw new Error(data.message);
 
       setStatus("success");
+      setMessage(data.message ?? "Registration successful!");
       setForm(initialState);
       setErrors({});
     } catch (err) {
+      setApiError(err instanceof Error ? err.message : "Something went wrong");
       setStatus("error");
     } finally {
       setSubmitting(false);
@@ -224,7 +136,7 @@ export default function RegistrationForm() {
   };
 
   return (
-    <Box id="register-form"  sx={{ py: { xs: 3, md: 6 }, px: { xs: 2, md: 6 } }}>
+    <Box id="register-form" sx={{ py: { xs: 3, md: 6 }, px: { xs: 2, md: 6 } }}>
       <Card
         elevation={0}
         sx={{
@@ -236,7 +148,6 @@ export default function RegistrationForm() {
           overflow: "hidden",
         }}
       >
-        {/* Header with accent bar, matches other cards */}
         <Box sx={{ display: "flex", alignItems: "center", mb: 1 }}>
           <Box
             sx={{
@@ -257,27 +168,50 @@ export default function RegistrationForm() {
           will contact you within 24 hours to confirm your enrollment.
         </Typography>
 
-        {status === "success" && (
-          <Alert
-            icon={<CheckCircleIcon fontSize="inherit" />}
-            severity="success"
-            sx={{ mb: 3, borderRadius: 2 }}
+        {(status === "success" || (status === "error" && apiError)) && (
+          <Box
+            sx={{
+              position: "fixed",
+              top: { xs: 16, md: 24 },
+              left: { xs: "50%", md: "auto" },
+              right: { xs: "auto", md: 24 },
+              transform: { xs: "translateX(-50%)", md: "none" },
+              width: { xs: "calc(100% - 32px)", sm: 380, md: 400 },
+              zIndex: (theme) => theme.zIndex.snackbar,
+            }}
           >
-            <strong>Registration Successful!</strong> Thank you for registering
-            with Drill Daily. We will contact you within 24 hours.
-          </Alert>
+            {status === "success" && (
+              <Alert
+                variant="filled"
+                icon={<CheckCircleIcon fontSize="inherit" />}
+                severity="success"
+                onClose={() => setStatus("idle")}
+                sx={{ borderRadius: 2, boxShadow: 3 }}
+              >
+                <strong>Registration Successful!</strong> {message}
+              </Alert>
+            )}
+
+            {status === "error" && apiError && (
+              <Alert
+                variant="filled"
+                severity="error"
+                onClose={() => setStatus("idle")}
+                sx={{ borderRadius: 2, boxShadow: 3 }}
+              >
+                {apiError}
+              </Alert>
+            )}
+          </Box>
         )}
 
-        {status === "error" && (
-          <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>
-            <strong>Registration Failed!</strong> Please check all required
-            fields and try again.
-          </Alert>
-        )}
-
-        <Box component="form" onSubmit={handleSubmit} noValidate>
+        <Box
+          component="form"
+          onSubmit={handleSubmit}
+          noValidate
+          sx={{ position: "relative", zIndex: 1 }}
+        >
           <Grid container spacing={2.5}>
-            {/* Row 1: First Name, Last Name, Email */}
             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 fullWidth
@@ -310,13 +244,14 @@ export default function RegistrationForm() {
                 label="Email Address"
                 placeholder="Enter your email"
                 value={form.email}
-                onChange={(e) => handleChange("email", e.target.value)}
+                onChange={(e) =>
+                  handleChange("email", e.target.value.toLowerCase())
+                }
                 error={Boolean(errors.email)}
                 helperText={errors.email}
               />
             </Grid>
 
-            {/* Row 2: Phone, Course Category, Class Type */}
             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 fullWidth
@@ -373,7 +308,6 @@ export default function RegistrationForm() {
               </TextField>
             </Grid>
 
-            {/* Preferred Classes checkboxes (conditional, full width) */}
             {form.courseCategory && (
               <Grid size={12}>
                 <FormLabel
@@ -426,7 +360,6 @@ export default function RegistrationForm() {
               </Grid>
             )}
 
-            {/* Row 3: Class Mode, Preferred Class Time */}
             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 select
@@ -467,7 +400,6 @@ export default function RegistrationForm() {
               </TextField>
             </Grid>
 
-            {/* Row 4: Goal & Timeline */}
             <Grid size={{ xs: 12, sm: 12, md: 8 }}>
               <TextField
                 fullWidth
@@ -480,7 +412,6 @@ export default function RegistrationForm() {
               />
             </Grid>
 
-            {/* Row 5: Submit */}
             <Grid size={{ xs: 12, sm: 12, md: 8 }}>
               <Button
                 type="submit"
@@ -514,7 +445,6 @@ export default function RegistrationForm() {
           </Grid>
         </Box>
 
-        {/* Decorative image, bottom-right corner */}
         <Box
           sx={{
             position: "absolute",
@@ -531,7 +461,7 @@ export default function RegistrationForm() {
             src="/img/home/register.webp"
             alt="Student registration illustration"
             fill
-            style={{ objectFit: "contain" }}
+            style={{ objectFit: "contain", pointerEvents: "none" }}
             sizes="(max-width: 900px) 0px, 360px"
           />
         </Box>
