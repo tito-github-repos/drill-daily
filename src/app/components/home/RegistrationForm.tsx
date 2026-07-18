@@ -224,7 +224,7 @@ export default function RegistrationForm() {
   };
 
   return (
-    <Box sx={{ py: { xs: 3, md: 6 }, px: { xs: 2, md: 6 } }}>
+    <Box id="register-form"  sx={{ py: { xs: 3, md: 6 }, px: { xs: 2, md: 6 } }}>
       <Card
         elevation={0}
         sx={{
