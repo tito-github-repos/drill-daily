@@ -1,60 +1,3 @@
-// import { NextResponse } from "next/server";
-// import { prisma } from "@/lib/prisma";
-
-// export async function POST(req: Request) {
-//   try {
-//     // 1. Read request body
-//     const body = await req.json();
-
-//     // 2. Check if the student already exists
-//     const existing = await prisma.studentRegistration.findFirst({
-//       where: {
-//         OR: [{ email: body.email }, { phone: body.phone }],
-//       },
-//     });
-
-//     if (existing) {
-//       return NextResponse.json(
-//         {
-//           success: false,
-//           message: "Student already registered",
-//         },
-//         { status: 409 },
-//       );
-//     }
-
-//     // 3. Create a new registration
-//     const student = await prisma.studentRegistration.create({
-//       data: {
-//         firstName: body.firstName,
-//         lastName: body.lastName,
-//         email: body.email,
-//         phone: body.phone,
-//         courseCategory: body.courseCategory,
-//         preferredCourses: body.preferredCourses,
-//         classType: body.classType,
-//         classMode: body.classMode,
-//         preferredTime: body.preferredTime,
-//         goals: body.goals,
-//       },
-//     });
-
-//     return NextResponse.json({
-//       success: true,
-//       student,
-//     });
-//   } catch (error) {
-//     console.error(error);
-
-//     return NextResponse.json(
-//       {
-//         success: false,
-//         message: "Registration failed",
-//       },
-//       { status: 500 },
-//     );
-//   }
-// }
 import { NextResponse } from "next/server";
 import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
@@ -139,8 +82,13 @@ export async function POST(req: Request) {
     }
   } catch (error) {
     console.error(error);
+    // TEMPORARY — remove once the deployed 500 is diagnosed and fixed.
     return NextResponse.json(
-      { success: false, message: "Registration failed" },
+      {
+        success: false,
+        message: "Registration failed",
+        debug: error instanceof Error ? error.message : String(error),
+      },
       { status: 500 },
     );
   }
