@@ -217,7 +217,7 @@
 .approachGrid {
   display: grid;
   grid-template-columns: 42% 58%;
-  gap: 44px;
+  gap: 30px;
   align-items: start;
 }
 
@@ -739,8 +739,8 @@
 .experienceSection {
   width: 100%;
   padding: 0 32px 40px;
-  background: #ffffff;
-  border-top: 1px solid #f1f5f9;
+  /* background: #ffffff;
+  border-top: 1px solid #f1f5f9; */
 }
 
 .experienceOuterCard {
@@ -827,8 +827,8 @@
 .joinSection {
   width: 100%;
   padding: 0 32px 40px;
-  background: #ffffff;
-  border-top: 1px solid #f1f5f9;
+  /* background: #ffffff;
+  border-top: 1px solid #f1f5f9; */
 }
 
 .joinOuterCard {
@@ -973,8 +973,8 @@
 
 .dashboardSection {
   width: 100%;
-  padding: 40px 32px 56px;
-  background: #f8fafc;
+  padding: 0 32px 40px;
+  /* background: #f8fafc; */
 }
 
 .dashboardOuterCard {
@@ -982,8 +982,10 @@
   margin: 0 auto;
   padding: 32px;
   border-radius: 20px;
-  background: #ffffff;
+   background: #fafbfc;
   border: 1px solid #edf2f7;
+  /* background: #ffffff;
+  border: 1px solid #edf2f7; */
 }
 
 .dashboardHeader {
