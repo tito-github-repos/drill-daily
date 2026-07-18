@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
-import { Prisma } from "@/generated/prisma/client";
 import { prisma } from "@/lib/prisma";
 import { registrationSchema } from "@/lib/validations/registration";
+import { Prisma } from "@/generated/prisma";
 
 export async function POST(req: Request) {
   try {
