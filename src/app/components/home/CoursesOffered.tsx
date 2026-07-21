@@ -57,7 +57,7 @@ const courses = [
       "CUET",
       "NATA",
     ],
-    fee: "₹ 2,499 / course",
+    fee: "₹ 2,999 / course",
   },
   {
     icon: <PublicIcon sx={{ color: "#7c3aed" }} />,
