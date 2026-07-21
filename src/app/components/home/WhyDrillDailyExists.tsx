@@ -32,7 +32,7 @@ const structure = [
   {
     step: "02",
     title: "Training Sessions with Subject Matter Expert",
-    desc: "Following the consulting segment, the structured training modules will be conducted by our specialised trainers, each being a subject matter expert in their respective domains.",
+    desc: "Following the consulting segment, the structured training modules will be conducted by our subject matter experts.",
   },
 ];
 
