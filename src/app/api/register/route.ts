@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { registrationSchema } from "@/lib/validations/registration";
 import { Prisma } from "@/generated/prisma";
+import { sendAdminNotification, sendStudentConfirmation } from "@/lib/email";
 
 export async function POST(req: Request) {
   try {
@@ -60,6 +61,40 @@ export async function POST(req: Request) {
           goals: body.goals?.trim() || null,
         },
       });
+
+      // Send emails (doesn't fail the registration if email sending fails)
+      try {
+        await Promise.all([
+          sendStudentConfirmation({
+            firstName: student.firstName,
+            lastName: student.lastName,
+            email: student.email,
+            phone: student.phone,
+            courseCategory: student.courseCategory,
+            preferredCourses: student.preferredCourses as string[],
+            classType: student.classType,
+            classMode: student.classMode,
+            preferredTime: student.preferredTime,
+            goals: student.goals ?? undefined,
+          }),
+
+          sendAdminNotification({
+            firstName: student.firstName,
+            lastName: student.lastName,
+            email: student.email,
+            phone: student.phone,
+            courseCategory: student.courseCategory,
+            preferredCourses: student.preferredCourses as string[],
+            classType: student.classType,
+            classMode: student.classMode,
+            preferredTime: student.preferredTime,
+            goals: student.goals ?? undefined,
+          }),
+        ]);
+      } catch (emailError) {
+        console.error("Email Sending Error:", emailError);
+        // Registration is already saved, so don't return an error.
+      }
 
       return NextResponse.json({
         success: true,
