@@ -50,8 +50,10 @@ export default function Header() {
 
   const styles: Record<string, CSSProperties> = {
     header: {
-      position: "sticky",
+      position: "fixed",
       top: 0,
+      left: 0,
+      right: 0,
       zIndex: 999,
       width: "100%",
       background: "rgba(255, 255, 255, 0.92)",
@@ -60,9 +62,7 @@ export default function Header() {
       borderBottom: scrolled
         ? "1px solid rgba(22,163,74,0.10)"
         : "1px solid rgba(15,23,42,0.05)",
-      boxShadow: scrolled
-        ? "0 8px 24px -12px rgba(22,163,74,0.18)"
-        : "none",
+      boxShadow: scrolled ? "0 8px 24px -12px rgba(22,163,74,0.18)" : "none",
       transition: "all .35s ease",
     },
 
@@ -217,8 +217,8 @@ export default function Header() {
         isHovered && !isActive
           ? "var(--primary-light)"
           : isMobile && isActive
-          ? "var(--primary-light)"
-          : "transparent",
+            ? "var(--primary-light)"
+            : "transparent",
       transition: "all .25s cubic-bezier(.4,0,.2,1)",
       alignSelf: "stretch",
       width: isMobile ? "100%" : "auto",
@@ -291,15 +291,19 @@ export default function Header() {
                 onMouseEnter={() => setCtaHover(true)}
                 onMouseLeave={() => setCtaHover(false)}
                 onClick={(e) => {
-                  setMenuOpen(false);
-                  if (pathname === "/") {
-                    e.preventDefault();
-                    document.getElementById("register-form")?.scrollIntoView({ behavior: "smooth" });
-                  }
+                    setMenuOpen(false);
+                    if (pathname === "/") {
+                        e.preventDefault();
+                        document.getElementById("register-form")?.scrollIntoView({ behavior: "smooth" });
+                    }
                 }}
               >
                 Register
-                <ArrowRight size={15} strokeWidth={2.2} style={styles.ctaArrow} />
+                <ArrowRight
+                  size={15}
+                  strokeWidth={2.2}
+                  style={styles.ctaArrow}
+                />
               </Link>
             </div>
           </nav>

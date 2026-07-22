@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/app/components/Header";
 import Footer from "@/app/components/Footer";
+import DisableCopy from "./components/DisableCopy";
 
 export const metadata: Metadata = {
   title: "Drill Daily",
@@ -16,8 +17,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
+        <DisableCopy />
         <Header />
-        <main>{children}</main>
+        <main style={{ paddingTop: "60px"}}>{children}</main>
         <Footer />
       </body>
     </html>

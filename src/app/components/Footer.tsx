@@ -12,9 +12,9 @@ interface SocialLink {
 }
 
 const SOCIAL_LINKS: SocialLink[] = [
-  { icon: FaLinkedin, href: "https://linkedin.com", label: "LinkedIn" },
-  { icon: FaInstagram, href: "https://instagram.com", label: "Instagram" },
-  { icon: FaFacebook, href: "https://facebook.com", label: "Facebook" },
+  { icon: FaLinkedin, href: "https://www.linkedin.com/company/90765852/admin/dashboard/", label: "LinkedIn" },
+  { icon: FaInstagram, href: "https://www.instagram.com/drilldailyusers/", label: "Instagram" },
+  { icon: FaFacebook, href: "https://www.facebook.com/profile.php?id=61585823977100", label: "Facebook" },
 ];
 
 const LEGAL_LINKS = [
@@ -71,6 +71,7 @@ export default function Footer() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
+              suppressHydrationWarning
               style={getIconStyle(label)}
               onMouseEnter={() => setHoveredIcon(label)}
               onMouseLeave={() => setHoveredIcon(null)}
