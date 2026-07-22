@@ -69,7 +69,7 @@ export default function Header() {
     container: {
       maxWidth: "1320px",
       margin: "0 auto",
-      padding: "12px 32px",
+      padding: isMobile ? "10px 16px" : "12px 32px",
       display: "flex",
       alignItems: "center",
       justifyContent: "space-between",
@@ -88,7 +88,7 @@ export default function Header() {
     },
 
     logoText: {
-      fontSize: "18px",
+      fontSize: isMobile ? "16px" : "18px",
       fontWeight: 800,
       letterSpacing: "-0.3px",
       color: "#111827",
@@ -115,14 +115,14 @@ export default function Header() {
           position: "fixed",
           top: 0,
           right: 0,
-          width: "300px",
-          maxWidth: "88vw",
+          width: "280px",
+          maxWidth: "85vw",
           height: "100vh",
           display: "flex",
           flexDirection: "column",
-          alignItems: "flex-start",
-          padding: "26px",
-          gap: "4px",
+          alignItems: "stretch",
+          padding: "24px 20px",
+          gap: "2px",
           background: "#fff",
           boxShadow: "-16px 0 40px rgba(0,0,0,.10)",
           transform: menuOpen ? "translateX(0)" : "translateX(100%)",
@@ -184,8 +184,8 @@ export default function Header() {
 
     menuToggle: {
       display: isMobile ? "flex" : "none",
-      width: "36px",
-      height: "36px",
+      width: "34px",
+      height: "34px",
       alignItems: "center",
       justifyContent: "center",
       borderRadius: "9px",
@@ -204,14 +204,15 @@ export default function Header() {
     const linkStyle: CSSProperties = {
       display: "flex",
       flexDirection: "column",
-      alignItems: "center",
+      alignItems: isMobile ? "flex-start" : "center",
       justifyContent: "center",
       position: "relative",
       padding: isMobile ? "12px 14px" : "8px 13px",
       borderRadius: "8px",
-      fontSize: isMobile ? "15.5px" : "13.5px",
+      fontSize: isMobile ? "15px" : "13.5px",
       fontWeight: isActive ? 700 : 600,
       color: isActive ? "var(--primary)" : "#374151",
+      textAlign: isMobile ? "left" : "center",
       background:
         isHovered && !isActive
           ? "var(--primary-light)"
@@ -219,7 +220,8 @@ export default function Header() {
           ? "var(--primary-light)"
           : "transparent",
       transition: "all .25s cubic-bezier(.4,0,.2,1)",
-      alignSelf: isMobile ? "stretch" : "center",
+      alignSelf: "stretch",
+      width: isMobile ? "100%" : "auto",
     };
 
     const underlineStyle: CSSProperties = {
@@ -259,8 +261,8 @@ export default function Header() {
             <Image
               src="/img/dd-logo.png"
               alt="Drill Daily"
-              width={36}
-              height={36}
+              width={isMobile ? 32 : 36}
+              height={isMobile ? 32 : 36}
               style={styles.logoImg}
               priority
             />
@@ -289,11 +291,11 @@ export default function Header() {
                 onMouseEnter={() => setCtaHover(true)}
                 onMouseLeave={() => setCtaHover(false)}
                 onClick={(e) => {
-                    setMenuOpen(false);
-                    if (pathname === "/") {
-                        e.preventDefault();
-                        document.getElementById("register-form")?.scrollIntoView({ behavior: "smooth" });
-                    }
+                  setMenuOpen(false);
+                  if (pathname === "/") {
+                    e.preventDefault();
+                    document.getElementById("register-form")?.scrollIntoView({ behavior: "smooth" });
+                  }
                 }}
               >
                 Register
