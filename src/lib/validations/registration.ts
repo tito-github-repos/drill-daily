@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import sanitizeHtml from "sanitize-html";
 
 export const courseOptions: Record<string, string[]> = {
   "job-exams": [
@@ -46,6 +47,7 @@ export type FormState = {
   classMode: string;
   preferredTime: string;
   goals: string;
+  website: string; // honeypot field — must stay empty; not shown to real users
 };
 
 export const initialState: FormState = {
@@ -59,26 +61,53 @@ export const initialState: FormState = {
   classMode: "",
   preferredTime: "",
   goals: "",
+  website: "",
 };
+
+// Strips ALL HTML/script content, leaving plain text only. Used on every
+// free-text field before it's stored or ever rendered anywhere (DB, admin
+// dashboard, email templates). This is what stops XSS — a name like
+// "<script>...</script>" becomes empty/plain text, never executable code.
+function sanitizeText(value: string): string {
+  return sanitizeHtml(value, {
+    allowedTags: [], // no HTML tags allowed at all
+    allowedAttributes: {}, // no attributes allowed at all
+  }).trim();
+}
 
 // Used by BOTH the client form (field-by-field + full validate) and the
 // /api/register route (full validate on the raw request body). Keeping this
 // in one file means the two can never drift out of sync.
+//
+// NOTE: `website` (the honeypot) is intentionally NOT part of this schema.
+// It's checked separately in route.ts BEFORE this schema ever runs.
 export const registrationSchema = yup.object({
   firstName: yup
     .string()
     .trim()
+    .transform((value) =>
+      typeof value === "string" ? sanitizeText(value) : value,
+    )
     .required("First name is required")
-    .min(3, "First name must be at least 3 characters"),
+    .min(3, "First name must be at least 3 characters")
+    .max(50, "First name must be under 50 characters"),
   lastName: yup
     .string()
     .trim()
+    .transform((value) =>
+      typeof value === "string" ? sanitizeText(value) : value,
+    )
     .required("Last name is required")
-    .min(1, "Last name must be at least 1 characters"),
+    .min(1, "Last name must be at least 1 characters")
+    .max(50, "Last name must be under 50 characters"),
   email: yup
     .string()
     .trim()
+    .transform((value) =>
+      typeof value === "string" ? sanitizeText(value) : value,
+    )
     .required("Email is required")
+    .max(254, "Email is too long")
     .test("email-validation", "Enter a valid email address", (value) => {
       if (!value || value.trim() === "") return true;
       return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(value);
@@ -121,7 +150,14 @@ export const registrationSchema = yup.object({
       "Please select a valid preferred class time",
     )
     .required("Please select a preferred class time"),
-  goals: yup.string().trim().optional(),
+  goals: yup
+    .string()
+    .trim()
+    .transform((value) =>
+      typeof value === "string" ? sanitizeText(value) : value,
+    )
+    .max(1000, "Please keep your goals under 1000 characters")
+    .optional(),
 });
 
 export type FormErrors = Partial<Record<keyof FormState, string>>;

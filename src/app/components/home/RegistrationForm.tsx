@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import * as yup from "yup";
 import {
   Box,
@@ -20,6 +20,7 @@ import {
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import Image from "next/image";
+import { Turnstile, type TurnstileInstance } from "@marsidev/react-turnstile";
 import {
   courseOptions,
   registrationSchema,
@@ -35,6 +36,11 @@ export default function RegistrationForm() {
   const [apiError, setApiError] = useState("");
   const [message, setMessage] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  // Turnstile token + a ref so we can reset the widget after each submit
+  // attempt (tokens are single-use — a stale token will be rejected).
+  const [turnstileToken, setTurnstileToken] = useState<string>("");
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   const validateField = async (
     field: keyof FormState,
@@ -102,6 +108,12 @@ export default function RegistrationForm() {
       return; // stop here, don't submit
     }
 
+    if (!turnstileToken) {
+      setApiError("Please complete the verification check before submitting.");
+      setStatus("error");
+      return;
+    }
+
     setSubmitting(true);
     setStatus("idle");
     setApiError("");
@@ -116,6 +128,8 @@ export default function RegistrationForm() {
           lastName: form.lastName.trim(),
           email: form.email.trim().toLowerCase(),
           goals: form.goals.trim(),
+          website: form.website, // honeypot value
+          turnstileToken,
         }),
       });
 
@@ -132,6 +146,9 @@ export default function RegistrationForm() {
       setStatus("error");
     } finally {
       setSubmitting(false);
+      // Tokens are single-use — always reset after an attempt, success or not.
+      turnstileRef.current?.reset();
+      setTurnstileToken("");
     }
   };
 
@@ -212,6 +229,33 @@ export default function RegistrationForm() {
           sx={{ position: "relative", zIndex: 1 }}
         >
           <Grid container spacing={2.5}>
+            {/* Honeypot field — invisible to real users, bots that
+                auto-fill every input will fill this in and get caught
+                server-side in route.ts */}
+            <Box
+              sx={{
+                position: "absolute",
+                left: "-9999px",
+                top: 0,
+                width: "1px",
+                height: "1px",
+                overflow: "hidden",
+                opacity: 0,
+              }}
+              aria-hidden="true"
+            >
+              <TextField
+                label="Website"
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                value={form.website}
+                onChange={(e) =>
+                  setForm((prev) => ({ ...prev, website: e.target.value }))
+                }
+              />
+            </Box>
+
             <Grid size={{ xs: 12, sm: 6, md: 4 }}>
               <TextField
                 fullWidth
@@ -409,6 +453,17 @@ export default function RegistrationForm() {
                 placeholder="Tell us about your exam goals and timeline..."
                 value={form.goals}
                 onChange={(e) => handleChange("goals", e.target.value)}
+              />
+            </Grid>
+
+            <Grid size={{ xs: 12, sm: 12, md: 8 }}>
+              <Turnstile
+                ref={turnstileRef}
+                siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY as string}
+                onSuccess={(token) => setTurnstileToken(token)}
+                onExpire={() => setTurnstileToken("")}
+                onError={() => setTurnstileToken("")}
+                options={{ theme: "light" }}
               />
             </Grid>
 

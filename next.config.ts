@@ -14,7 +14,8 @@ const csp = `
     'unsafe-eval'
     https://maps.googleapis.com
     https://maps.gstatic.com
-    https://www.google.com;
+    https://www.google.com
+    https://challenges.cloudflare.com;
 
   style-src
     'self'
@@ -37,12 +38,14 @@ const csp = `
   connect-src
     'self'
     https://maps.googleapis.com
-    https://maps.gstatic.com;
+    https://maps.gstatic.com
+    https://challenges.cloudflare.com;
 
   frame-src
     'self'
     https://www.google.com
-    https://maps.google.com;
+    https://maps.google.com
+    https://challenges.cloudflare.com;
 
   worker-src
     'self'
