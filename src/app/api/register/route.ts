@@ -4,15 +4,79 @@ import { registrationSchema } from "@/lib/validations/registration";
 import { Prisma } from "@/generated/prisma";
 import { sendAdminNotification, sendStudentConfirmation } from "@/lib/email";
 
+// Verifies a Turnstile token with Cloudflare's server. Returns true only if
+// Cloudflare confirms the token is real, unexpired, and unused.
+async function verifyTurnstileToken(
+  token: string,
+  remoteIp?: string,
+): Promise<boolean> {
+  try {
+    const formData = new URLSearchParams();
+    formData.append("secret", process.env.TURNSTILE_SECRET_KEY as string);
+    formData.append("response", token);
+    if (remoteIp) formData.append("remoteip", remoteIp);
+
+    const res = await fetch(
+      "https://challenges.cloudflare.com/turnstile/v0/siteverify",
+      {
+        method: "POST",
+        body: formData,
+      },
+    );
+
+    const data = await res.json();
+    return data.success === true;
+  } catch (err) {
+    console.error("Turnstile verification error:", err);
+    return false; // fail closed — if we can't verify, don't trust it
+  }
+}
+
 export async function POST(req: Request) {
   try {
     // 1. Read request body
     const raw = await req.json();
 
+    // 1a. Honeypot check — must run before anything else.
+    // `website` should always be empty for real users (it's hidden via CSS).
+    // If it has a value, a bot filled it in. We return a fake "success" so
+    // the bot doesn't learn it was caught, but we never touch the DB/email.
+    if (typeof raw.website === "string" && raw.website.trim() !== "") {
+      return NextResponse.json({
+        success: true,
+        message: "We will contact you within 24 hours.",
+      });
+    }
+
+    // 1b. Turnstile check — must run before schema validation/DB work too.
+    const turnstileToken = raw.turnstileToken;
+    if (typeof turnstileToken !== "string" || !turnstileToken) {
+      return NextResponse.json(
+        { success: false, message: "Verification failed. Please try again." },
+        { status: 400 },
+      );
+    }
+
+    const remoteIp = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim();
+    const isHuman = await verifyTurnstileToken(turnstileToken, remoteIp);
+
+    if (!isHuman) {
+      return NextResponse.json(
+        { success: false, message: "Verification failed. Please try again." },
+        { status: 400 },
+      );
+    }
+
+    // Strip honeypot + turnstile fields before they reach the real schema —
+    // the schema doesn't know about them and doesn't need to.
+    const { website, turnstileToken: _token, ...formData } = raw;
+    void website;
+    void _token;
+
     // 2. Validate on the server too — never trust the client.
     let body;
     try {
-      body = await registrationSchema.validate(raw, {
+      body = await registrationSchema.validate(formData, {
         abortEarly: false,
         stripUnknown: true,
       });
@@ -51,9 +115,6 @@ export async function POST(req: Request) {
           email,
           phone,
           courseCategory: body.courseCategory,
-          // Validated by the schema (min 1), but yup's inferred type still
-          // carries `| undefined` here — coalesce so it matches Prisma's
-          // InputJsonValue instead of fighting yup's TS inference.
           preferredCourses: (body.preferredCourses ?? []) as string[],
           classType: body.classType,
           classMode: body.classMode,
@@ -62,7 +123,6 @@ export async function POST(req: Request) {
         },
       });
 
-      // Send emails (doesn't fail the registration if email sending fails)
       try {
         await Promise.all([
           sendStudentConfirmation({
@@ -93,7 +153,6 @@ export async function POST(req: Request) {
         ]);
       } catch (emailError) {
         console.error("Email Sending Error:", emailError);
-        // Registration is already saved, so don't return an error.
       }
 
       return NextResponse.json({
@@ -102,8 +161,6 @@ export async function POST(req: Request) {
         student,
       });
     } catch (err) {
-      // Race condition: two submits with the same email/phone landed between
-      // our findFirst check and this create() call.
       if (
         err instanceof Prisma.PrismaClientKnownRequestError &&
         err.code === "P2002"
@@ -117,7 +174,6 @@ export async function POST(req: Request) {
     }
   } catch (error) {
     console.error(error);
-    // TEMPORARY — remove once the deployed 500 is diagnosed and fixed.
     return NextResponse.json(
       {
         success: false,
