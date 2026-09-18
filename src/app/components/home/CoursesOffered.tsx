@@ -31,7 +31,7 @@ const courses = [
       "PO",
       "RRB",
     ],
-    fee: "₹ 2,999 / course",
+    fee: "₹ 1,999 / course",
   },
   {
     icon: <SchoolIcon sx={{ color: "#2563eb" }} />,
@@ -48,16 +48,16 @@ const courses = [
     title: "Higher Education Entrance Exams",
     tags: [
       "NEET",
+      "IIT-JEE",
       "NID",
       "NIFT",
       "UCEED",
-      "CLAT",
-      "IPM",
-      "IIT-JEE",
-      "CUET",
       "NATA",
+      "CLAT",
+      "IPMAT",
+      "CUET",
     ],
-    fee: "₹ 2,999 / course",
+    fee: "₹ 1,999 / course",
   },
   {
     icon: <PublicIcon sx={{ color: "#7c3aed" }} />,
@@ -81,7 +81,7 @@ const courses = [
       "TOEFL",
       "LSAT",
     ],
-    fee: "₹ 2,999 / course",
+    fee: "₹ 1,999 / course",
   },
 ];
 
