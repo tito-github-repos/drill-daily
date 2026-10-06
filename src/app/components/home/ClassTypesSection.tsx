@@ -255,9 +255,9 @@ export default function ClassTypesSection() {
               sx={{ mb: 2, flexGrow: 1, postion: "relative", zIndex: 1 }}
             >
               {[
-                "Improve Mental Agility",
-                "Sharpen Focus",
-                "Practice Smart",
+                "Lens Focus  ",
+                "Elephant  Memory ",
+                "Razor Sharp",
               ].map((item) => (
                 <Stack
                   direction="row"
