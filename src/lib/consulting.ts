@@ -44,3 +44,13 @@ export const isPhone = (v: unknown): v is string =>
   typeof v === "string" && /^[6-9]\d{9}$/.test(v);
 
 export const maskPhone = (p: string) => `******${p.slice(-4)}`;
+export const MEETING_MODES = ["online", "offline"] as const;
+export type MeetingMode = (typeof MEETING_MODES)[number];
+
+export const MEETING_LABEL: Record<string, string> = {
+  online: "Online",
+  offline: "Offline (in person)",
+};
+
+export const isMeetingMode = (v: unknown): v is MeetingMode =>
+  typeof v === "string" && (MEETING_MODES as readonly string[]).includes(v);

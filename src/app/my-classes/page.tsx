@@ -389,7 +389,7 @@ export default function MyClassesPage(): React.JSX.Element {
                         Group Classes
                       </Typography>
                       <Typography className={styles.cardSubtitle}>
-                        (Up to 12 Students)
+                        (Up to 20 Students)
                       </Typography>
                     </Box>
                   </Box>
