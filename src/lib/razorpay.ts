@@ -9,7 +9,7 @@ export const razorpay = new Razorpay({
 export const COURSE_PLANS: Record<string, { name: string; amount: number }> = {
   job: { name: "Job Exams", amount: 199900 },
   higher: { name: "Higher Education Entrance Exams", amount: 199900 },
-  abroad: { name: "Abroad Education Exams", amount: 199900 },
+  abroad: { name: "Abroad Education Exams", amount: 100 },
 };
 
 export const isEmail = (v: unknown): v is string =>
