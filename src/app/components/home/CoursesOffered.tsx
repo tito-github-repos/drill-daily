@@ -638,7 +638,11 @@ export default function CoursesOffered() {
 
       <Dialog
         open={!!active}
-        onClose={closeDialog}
+        scroll="paper"
+        onClose={(_, reason) => {
+          if (reason === "backdropClick") return; // clicking outside does nothing
+          closeDialog();
+        }}
         fullWidth
         maxWidth={wide ? "md" : "xs"}
         fullScreen={fullScreen}
@@ -648,7 +652,9 @@ export default function CoursesOffered() {
               borderRadius: fullScreen ? 0 : 3,
               overflow: "hidden",
               m: fullScreen ? 0 : 2,
-              maxHeight: fullScreen ? "100%" : "calc(100% - 32px)",
+              display: "flex",
+              flexDirection: "column",
+              maxHeight: fullScreen ? "100dvh" : "calc(100dvh - 32px)",
             },
           },
         }}
@@ -658,10 +664,13 @@ export default function CoursesOffered() {
             sx={{
               position: "relative",
               p: 0,
-              // no visible scrollbar; content is sized to fit
+              flex: "1 1 auto",
+              minHeight: 0,                 // lets the content shrink and scroll
               overflowY: "auto",
-              scrollbarWidth: "none",
-              "&::-webkit-scrollbar": { display: "none" },
+              overscrollBehavior: "contain", // scroll never leaks to the page behind
+              scrollbarWidth: "thin",
+              "&::-webkit-scrollbar": { width: 6 },
+              "&::-webkit-scrollbar-thumb": { backgroundColor: "#c7ccd1", borderRadius: 3 },
             }}
           >
             <IconButton
