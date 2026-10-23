@@ -137,19 +137,19 @@ export const registrationSchema = yup.object({
     ),
   classType: yup
     .string()
-    .oneOf(["one-to-one", "group-classes"], "Please select a valid class type")
-    .required("Please select a class type"),
+    .oneOf(["one-to-one", "group-classes", ""], "Please select a valid class type")
+    .optional(),
   classMode: yup
     .string()
-    .oneOf(["online", "offline", "hybrid"], "Please select a valid class mode")
-    .required("Please select a class mode"),
+    .oneOf(["online", "offline", "hybrid", ""], "Please select a valid class mode")
+    .optional(),
   preferredTime: yup
     .string()
     .oneOf(
-      ["morning", "afternoon", "evening", "night", "weekend", "flexible"],
+      ["morning", "afternoon", "evening", "night", "weekend", "flexible", ""],
       "Please select a valid preferred class time",
     )
-    .required("Please select a preferred class time"),
+    .optional(),
   goals: yup
     .string()
     .trim()
