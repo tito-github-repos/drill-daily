@@ -91,6 +91,7 @@ export async function POST(req: Request) {
 
     const email = body.email.trim().toLowerCase();
     const phone = body.phone.trim();
+  
 
     // 3. Check if the student already exists, and say which field collided.
     const existing = await prisma.studentRegistration.findFirst({
@@ -116,9 +117,9 @@ export async function POST(req: Request) {
           phone,
           courseCategory: body.courseCategory,
           preferredCourses: (body.preferredCourses ?? []) as string[],
-          classType: body.classType,
-          classMode: body.classMode,
-          preferredTime: body.preferredTime,
+          classType: body.classType ?? "",
+          classMode: body.classMode ?? "",
+          preferredTime: body.preferredTime ?? "",
           goals: body.goals?.trim() || null,
         },
       });

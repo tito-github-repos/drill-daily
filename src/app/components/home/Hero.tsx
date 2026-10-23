@@ -71,10 +71,11 @@ export default function Hero() {
                   fontSize: { xs: 32, md: 44 },
                 }}
               >
-                Where Focus Goes,{" "}
+                Where Focus Goes,
+                <br />
                 <Box component="span" sx={{ color: "var(--primary)" }}>
-                  Energy{" "}
-                </Box>
+                  Energy
+                </Box>{" "}
                 Flows.
               </Typography>
 
