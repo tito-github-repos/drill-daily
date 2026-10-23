@@ -1,6 +1,7 @@
 import PaymentConfirmation from "@/templates/paymentConfirmation";
 import PaymentAdminNotification from "@/templates/paymentAdminNotification";
 import { resend } from "./resend";
+import { MEETING_LABEL } from "@/lib/consulting";
 
 interface PaymentEmailData {
   to: string;              // contact email from the booking form
@@ -15,6 +16,7 @@ interface PaymentEmailData {
   consultDate: string;     // already formatted
   slot: string;
   subjects: string[];
+  meetingMode?: string; // optional, only if the student selected one
 }
 
 const formatINR = (paise: number) => (paise / 100).toLocaleString("en-IN");
@@ -36,6 +38,7 @@ export async function sendPaymentEmails(d: PaymentEmailData) {
           consultDate={d.consultDate}
           slot={d.slot}
           subjects={d.subjects}
+          meetingMode={d.meetingMode ? MEETING_LABEL[d.meetingMode] ?? d.meetingMode : undefined}
         />
       ),
     }),

@@ -94,6 +94,7 @@ export async function markPaidAndNotify(
       consultDate: formatSlotDate(slot),
       slot: SLOT_LABEL,
       subjects: Array.isArray(row.subjects) ? (row.subjects as string[]) : [],
+      meetingMode: row.meetingMode ?? undefined,
     });
   } catch (err) {
     console.error(`[payment email failed] order ${orderId} payment ${paymentId}`, err);

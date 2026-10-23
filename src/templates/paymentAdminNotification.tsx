@@ -14,10 +14,22 @@ interface PaymentAdminNotificationProps {
   consultDate: string;
   slot: string;
   subjects: string[];
+  meetingMode?: string; // optional, only if the student selected one
 }
 
 export default function PaymentAdminNotification({
-  studentName, email, phone, courseName, amount, paymentId, orderId, registeredEmail, consultDate, slot, subjects 
+  studentName,
+  email,
+  phone,
+  courseName,
+  amount,
+  paymentId,
+  orderId,
+  registeredEmail,
+  consultDate,
+  slot,
+  subjects,
+  meetingMode,
 }: PaymentAdminNotificationProps) {
   return (
     <Html>
@@ -41,6 +53,7 @@ export default function PaymentAdminNotification({
           <Text><strong>Course:</strong> {courseName}</Text>
           <Text><strong>Subjects:</strong> {subjects.join(", ")}</Text>
           <Text><strong>Consultation:</strong> {consultDate}, {slot}</Text>
+          {meetingMode && <Text><strong>Meeting mode:</strong> {meetingMode}</Text>}
           <Text><strong>Amount:</strong> ₹{amount}</Text>
           <Text><strong>Payment ID:</strong> {paymentId}</Text>
           <Text><strong>Order ID:</strong> {orderId}</Text>

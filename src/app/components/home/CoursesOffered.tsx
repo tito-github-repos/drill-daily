@@ -20,6 +20,11 @@ import {
   Divider,
   useMediaQuery,
   useTheme,
+  FormControl,
+  FormLabel,
+  RadioGroup,
+  FormControlLabel,
+  Radio,
 } from "@mui/material";
 import WorkOutlinedIcon from "@mui/icons-material/WorkOutlined";
 import SchoolIcon from "@mui/icons-material/SchoolOutlined";
@@ -29,7 +34,7 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
-import { formatSlotDate, SLOT_LABEL, subjectsFor } from "@/lib/consulting";
+import { formatSlotDate, SLOT_LABEL, subjectsFor, MEETING_LABEL } from "@/lib/consulting";
 
 const courses = [
   {
@@ -45,7 +50,7 @@ const courses = [
     cardBorder: "#bfe3cd",
     tagsBg: "var(--white)",
     feeColor: "var(--primary)",
-    title: "Job Exams",
+    title: "Governement Service Exams",
     tags: ["UPSC", "SSC", "RBI", "NDA", "AFCAT", "CDSE", "CAPF", "IBPS", "PO", "RRB"],
     fee: "₹ 1,999 / course",
   },
@@ -186,7 +191,7 @@ function ConsultCalendar({
   const first = sorted.length ? parseKey(sorted[0]) : { y: 2026, m: 0, d: 1 };
   const last = sorted.length ? parseKey(sorted[sorted.length - 1]) : first;
   const start = value ? parseKey(value) : first;
-
+  
   const [view, setView] = useState({ y: start.y, m: start.m });
 
   const minIdx = first.y * 12 + first.m;
@@ -332,7 +337,7 @@ export default function CoursesOffered() {
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
   const [formError, setFormError] = useState("");
-
+  const [meetingMode, setMeetingMode] = useState("");
   const openDialog = (c: Course) => {
     setActive(c);
     setEmail("");
@@ -344,6 +349,7 @@ export default function CoursesOffered() {
     setContactEmail("");
     setContactPhone("");
     setFormError("");
+    setMeetingMode("");
   };
   const closeDialog = () => {
     if (step === "checking" || step === "paying" || step === "confirming") return;
@@ -362,7 +368,7 @@ export default function CoursesOffered() {
   const emailValid = isEmailStr(email);
   const contactEmailValid = isEmailStr(contactEmail);
   const contactPhoneValid = contactPhone === "" || /^[6-9]\d{9}$/.test(contactPhone);
-  const canPay = !!date && subjects.length > 0 && contactEmailValid && contactPhoneValid;
+  const canPay = !!date && subjects.length > 0 && !!meetingMode && contactEmailValid && contactPhoneValid;
 
   // Registered? -> load prefill + which dates are taken
   const loadDetails = async (c: Course) => {
@@ -461,6 +467,7 @@ export default function CoursesOffered() {
         courseKey: active.key,
         consultDate: date,
         subjects,
+        meetingMode,
         contactEmail: contactEmail.trim(),
         contactPhone,
       });
@@ -802,6 +809,7 @@ export default function CoursesOffered() {
                     </Typography>
 
                     <Stack spacing={1.5}>
+
                       <TextField
                         fullWidth
                         size="small"
@@ -842,6 +850,23 @@ export default function CoursesOffered() {
                         error={!contactPhoneValid}
                         helperText={!contactPhoneValid ? "Enter a valid 10-digit number" : undefined}
                       />
+
+                      <FormControl disabled={step === "paying"}>
+                      <FormLabel sx={{ fontSize: 13, fontWeight: 700 }}>Meeting mode</FormLabel>
+                      <RadioGroup
+                        row
+                        value={meetingMode}
+                        onChange={(e) => setMeetingMode(e.target.value)}
+                      >
+                        <FormControlLabel value="online" control={<Radio size="small" />} label="Online" />
+                        <FormControlLabel value="offline" control={<Radio size="small" />} label="Offline" />
+                      </RadioGroup>
+                      {!meetingMode && (
+                        <Typography variant="caption" color="error">
+                          Choose online or offline
+                        </Typography>
+                      )}
+                    </FormControl>
                       <Autocomplete
                         multiple
                         size="small"
@@ -901,6 +926,12 @@ export default function CoursesOffered() {
                         <Typography variant="body2" sx={{ opacity: 0.7 }}>Date</Typography>
                         <Typography variant="body2" sx={{ fontWeight: 700, textAlign: "right" }}>
                           {date ? shortDate(date) : "Select a date"}
+                        </Typography>
+                      </Stack>
+                      <Stack direction="row" sx={{ justifyContent: "space-between", gap: 2, mt: 0.25 }}>
+                        <Typography variant="body2" sx={{ opacity: 0.7 }}>Meeting mode</Typography>
+                        <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                          {meetingMode ? MEETING_LABEL[meetingMode] : "Select mode"}
                         </Typography>
                       </Stack>
                       <Stack direction="row" sx={{ justifyContent: "space-between", gap: 2, mt: 0.25 }}>

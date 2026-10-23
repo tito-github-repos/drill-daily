@@ -11,10 +11,10 @@ interface PaymentConfirmationProps {
   consultDate: string;
   slot: string;
   subjects: string[];
+  meetingMode?: string; // optional, only if the student selected one
 }
-
 export default function PaymentConfirmation({
-  firstName, courseName, amount, paymentId, consultDate, slot, subjects,
+  firstName, courseName, amount, paymentId, consultDate, slot, subjects, meetingMode,
 }: PaymentConfirmationProps) {
   return (
     <Html>
@@ -44,6 +44,7 @@ export default function PaymentConfirmation({
           >
             <Text><strong>Date:</strong> {consultDate}</Text>
             <Text><strong>Time:</strong> {slot}</Text>
+            {meetingMode && <Text><strong>Meeting mode:</strong> {meetingMode}</Text>}
             <Text><strong>Subjects:</strong> {subjects.join(", ")}</Text>
             <Text><strong>Amount Paid:</strong> ₹{amount}</Text>
             <Text><strong>Payment ID:</strong> {paymentId}</Text>

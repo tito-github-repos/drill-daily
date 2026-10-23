@@ -7,6 +7,7 @@ import {
   getBookableDates,
   subjectsFor,
   isPhone,
+  isMeetingMode,
   HOLD_MINUTES,
 } from "@/lib/consulting";
 
@@ -17,7 +18,7 @@ export async function POST(req: Request) {
   try {
     const body = await req.json().catch(() => null);
     if (!body) return bad("Invalid request");
-    const { email, courseKey, consultDate, subjects, contactEmail, contactPhone } = body;
+    const { email, courseKey, consultDate, subjects, contactEmail, contactPhone, meetingMode  } = body;
 
     const plan = COURSE_PLANS[courseKey];
     if (!isEmail(email) || !plan) return bad("Invalid request");
@@ -37,7 +38,7 @@ export async function POST(req: Request) {
     const cleanSubjects = Array.from(new Set(subjects as string[]));
 
     if (!isEmail(contactEmail)) return bad("Enter a valid contact email.");
-
+    if (!isMeetingMode(meetingMode)) return bad("Please choose Online or Offline.");
     const cleanEmail = email.trim().toLowerCase();
     const cleanContactEmail = contactEmail.trim().toLowerCase();
 
@@ -96,6 +97,7 @@ export async function POST(req: Request) {
             courseKey,
             consultDate: new Date(`${consultDate}T00:00:00Z`),
             slotKey: consultDate, // unique: if taken, this fails and the old date stays held
+            meetingMode,
             subjects: cleanSubjects,
             contactEmail: cleanContactEmail,
             contactPhone: phone,
