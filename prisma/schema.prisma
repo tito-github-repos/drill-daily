@@ -31,6 +31,7 @@ model consulting_payment {
   contactPhone      String   
   courseKey         String                       // "job" | "higher" | "abroad"
   subjects          Json
+  meetingMode       String?
   consultDate       DateTime  @db.Date
   slotKey           String?   @unique             // "YYYY-MM-DD" while held/paid, NULL when released
   holdExpiresAt     DateTime?
