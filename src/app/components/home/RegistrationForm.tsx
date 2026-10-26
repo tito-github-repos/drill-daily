@@ -347,7 +347,7 @@ export default function RegistrationForm() {
                 <MenuItem value="">Select class type</MenuItem>
                 <MenuItem value="one-to-one">One-to-One Classes</MenuItem>
                 <MenuItem value="group-classes">
-                  Group Classes (Up to 12 students)
+                  Group Classes (Up to 20 students)
                 </MenuItem>
               </TextField>
             </Grid>

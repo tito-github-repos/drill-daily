@@ -22,7 +22,7 @@ const classTypes = [
     icon: <GroupIcon sx={{ color: "var(--secondary)" }} />,
     bg: "var(--secondary-light)",
     title: "Group Classes",
-    desc: "Up to 12 students for collaborative learning",
+    desc: "Up to 20 students for collaborative learning",
   },
 ];
 

@@ -10,7 +10,7 @@ export const courseCategoryLabels: Record<string, string> = {
 
 export const classTypeLabels: Record<string, string> = {
   "one-to-one": "One-to-One Classes",
-  "group-classes": "Group Classes (Up to 12 students)",
+  "group-classes": "Group Classes (Up to 20 students)",
 };
 
 export const classModeLabels: Record<string, string> = {

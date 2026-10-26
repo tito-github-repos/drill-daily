@@ -7,7 +7,7 @@ import SchoolIcon from "@mui/icons-material/SchoolOutlined";
 
 const points = [
   "One-to-one personalised tutoring",
-  "Group classes (up to 12 students)",
+  "Group classes (up to 20 students)",
   "Exam-specific structured learning",
   "Expert teacher allocation based on subject needs",
   "Flexible mode options (Online / Offline)",
