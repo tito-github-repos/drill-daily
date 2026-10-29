@@ -74,9 +74,9 @@ export default function Hero() {
                 Where Focus Goes,
                 <br />
                 <Box component="span" sx={{ color: "var(--primary)" }}>
-                  Energy
+                  Energy Flows.
                 </Box>{" "}
-                Flows.
+               
               </Typography>
 
               <Typography
