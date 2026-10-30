@@ -36,6 +36,11 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutlined";
 import { formatSlotDate, SLOT_LABEL, subjectsFor, MEETING_LABEL } from "@/lib/consulting";
 
+/*
+  Each course now has `groups` instead of a flat `tags` list.
+  Every group = a small label + its exams. To regroup, just move exams
+  between groups here; the card layout updates automatically.
+*/
 const courses = [
   {
     key: "job",
@@ -50,8 +55,12 @@ const courses = [
     cardBorder: "#bfe3cd",
     tagsBg: "var(--white)",
     feeColor: "var(--primary)",
-    title: "Governement Service Exams",
-    tags: ["UPSC", "SSC", "RBI", "NDA", "AFCAT", "CDSE", "CAPF", "IBPS", "PO", "RRB"],
+    title: "Government Service Exams",
+    groups: [
+      { label: "Civil Services & Central Government", tags: ["UPSC", "SSC"] },
+      { label: "Defence and Uniform Services", tags: ["NDA", "AFCAT", "CDSE", "CAPF"] },
+      { label: "Banking, Insurance & Railways", tags: ["RBI", "SBI", "IBPS","Insurance","RRB"] },
+    ],
     fee: "₹ 1,999 / course",
   },
   {
@@ -68,7 +77,11 @@ const courses = [
     tagsBg: "#f2f6fe",
     feeColor: "#2563eb",
     title: "Higher Education Entrance Exams",
-    tags: ["NEET", "IIT-JEE", "NID", "NIFT", "UCEED", "NATA", "CLAT", "IPMAT", "CUET"],
+    groups: [
+      { label: "Medical & Engineering", tags: ["NEET", "IIT-JEE"] },
+      { label: "Design & Architecture", tags: ["NID", "NIFT", "UCEED", "NATA"] },
+      { label: "Law, Management & Others", tags: ["CLAT", "IPMAT","UG - IIMB", "CUET"] },
+    ],
     fee: "₹ 1,999 / course",
   },
   {
@@ -85,7 +98,11 @@ const courses = [
     tagsBg: "#f9f5fe",
     feeColor: "#7c3aed",
     title: "Abroad Education Exams",
-    tags: ["GMAT", "LSE Mathematics", "GRE", "SAT", "IELTS", "TOEFL", "LSAT"],
+    groups: [
+      { label: "Undergraduate", tags: ["SAT", "AP", "LSE Mathematics"] },
+      { label: "Postgraduate", tags: ["GRE", "GMAT", "LSAT"] },
+      { label: "English proficiency", tags: ["IELTS", "TOEFL"] },
+    ],
     fee: "₹ 1,999 / course",
   },
 ];
@@ -105,7 +122,7 @@ type Prefill = {
   };
   bookableDates: string[];
   bookedDates: string[];
-    myHold: { date: string; orderId: string; expiresAt: string | null } | null;
+  myHold: { date: string; orderId: string; expiresAt: string | null } | null;
 };
 
 declare global {
@@ -191,7 +208,7 @@ function ConsultCalendar({
   const first = sorted.length ? parseKey(sorted[0]) : { y: 2026, m: 0, d: 1 };
   const last = sorted.length ? parseKey(sorted[sorted.length - 1]) : first;
   const start = value ? parseKey(value) : first;
-  
+
   const [view, setView] = useState({ y: start.y, m: start.m });
 
   const minIdx = first.y * 12 + first.m;
@@ -504,8 +521,7 @@ export default function CoursesOffered() {
           }
         },
         modal: {
-          // closed without paying: free the date straight away
-                    ondismiss: () => {
+          ondismiss: () => {
             if (settled) return;
             // keep the hold: the student can resume the same order for 24 hours
             refreshAvailability(active).catch(() => {});
@@ -532,7 +548,7 @@ export default function CoursesOffered() {
   const feeText = active ? active.fee.replace(" / course", "") : "";
 
   return (
-    <Box sx={{ py: { xs: 3, md: 6 }, px: { xs: 2, md: 6 } }}>
+    <Box sx={{ py: { xs: 1, md: 2 }, px: { xs: 2, md: 6 } }}>
       <Box sx={{ display: "flex", alignItems: "center", mb: 4 }}>
         <Box
           component="img"
@@ -594,21 +610,55 @@ export default function CoursesOffered() {
                 </Typography>
               </Stack>
 
+              {/* Exam groups: a small label, then its exams */}
               <Box
                 sx={{
                   bgcolor: "var(--white)",
                   border: `1px solid ${c.cardBorder}`,
                   borderRadius: 2,
-                  p: 2,
+                  px: 2,
+                  py: 0.5,
                   mb: 2,
                   flexGrow: 1,
                 }}
               >
-                <Stack direction="row" sx={{ flexWrap: "wrap", gap: 1 }}>
-                  {c.tags.map((tag) => (
-                    <Chip key={tag} label={tag} size="small" sx={{ bgcolor: "var(--white)", fontWeight: 700 }} />
-                  ))}
-                </Stack>
+                {c.groups.map((g, gi) => (
+                  <Box
+                    key={g.label}
+                    sx={{
+                      py: 1.25,
+                      borderTop: gi === 0 ? "none" : `1px dashed ${c.cardBorder}`,
+                    }}
+                  >
+                    <Typography
+                      variant="caption"
+                      sx={{
+                        display: "block",
+                        mb: 0.75,
+                        fontWeight: 700,
+                        color: c.titleColor,
+                        lineHeight: 1.3,
+                      }}
+                    >
+                      {g.label}
+                    </Typography>
+                    <Stack direction="row" sx={{ flexWrap: "wrap", gap: 0.5 }}>
+                      {g.tags.map((tag) => (
+                        <Chip
+                          key={tag}
+                          label={tag}
+                          size="small"
+                          sx={{
+                            bgcolor: c.tagsBg,
+                            border: `1px solid ${c.cardBorder}`,
+                            fontWeight: 700,
+                            "& .MuiChip-label": { px: 1 },
+                          }}
+                        />
+                      ))}
+                    </Stack>
+                  </Box>
+                ))}
               </Box>
 
               <Box sx={{ textAlign: "center", mb: 2 }}>
@@ -636,7 +686,7 @@ export default function CoursesOffered() {
                   "&:hover": { bgcolor: c.cardHoverColor, filter: "brightness(0.92)" },
                 }}
               >
-                Buy now
+                Book now
               </Button>
             </Card>
           </Grid>
@@ -672,7 +722,7 @@ export default function CoursesOffered() {
               position: "relative",
               p: 0,
               flex: "1 1 auto",
-              minHeight: 0,                 // lets the content shrink and scroll
+              minHeight: 0, // lets the content shrink and scroll
               overflowY: "auto",
               overscrollBehavior: "contain", // scroll never leaks to the page behind
               scrollbarWidth: "thin",
@@ -809,7 +859,6 @@ export default function CoursesOffered() {
                     </Typography>
 
                     <Stack spacing={1.5}>
-
                       <TextField
                         fullWidth
                         size="small"
@@ -852,21 +901,21 @@ export default function CoursesOffered() {
                       />
 
                       <FormControl disabled={step === "paying"}>
-                      <FormLabel sx={{ fontSize: 13, fontWeight: 700 }}>Meeting mode</FormLabel>
-                      <RadioGroup
-                        row
-                        value={meetingMode}
-                        onChange={(e) => setMeetingMode(e.target.value)}
-                      >
-                        <FormControlLabel value="online" control={<Radio size="small" />} label="Online" />
-                        <FormControlLabel value="offline" control={<Radio size="small" />} label="Offline" />
-                      </RadioGroup>
-                      {!meetingMode && (
-                        <Typography variant="caption" color="error">
-                          Choose online or offline
-                        </Typography>
-                      )}
-                    </FormControl>
+                        <FormLabel sx={{ fontSize: 13, fontWeight: 700 }}>Meeting mode</FormLabel>
+                        <RadioGroup
+                          row
+                          value={meetingMode}
+                          onChange={(e) => setMeetingMode(e.target.value)}
+                        >
+                          <FormControlLabel value="online" control={<Radio size="small" />} label="Online" />
+                          <FormControlLabel value="offline" control={<Radio size="small" />} label="Offline" />
+                        </RadioGroup>
+                        {!meetingMode && (
+                          <Typography variant="caption" color="error">
+                            Choose online or offline
+                          </Typography>
+                        )}
+                      </FormControl>
                       <Autocomplete
                         multiple
                         size="small"
