@@ -299,7 +299,7 @@ function ContactInfoSection() {
     {
       icon: Phone,
       title: "Contact",
-      detail: "+91 9999532357",
+      detail: "+91 9499953257",
       iconBg: "var(--primary-light)",
       iconColor: "var(--primary)",
     },
