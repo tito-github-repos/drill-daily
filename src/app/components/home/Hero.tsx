@@ -60,7 +60,7 @@ export default function Hero() {
                   width: "fit-content",
                 }}
               >
-                #1 Exam Prep Platform
+                Exam Prep Platform
               </Box>
 
               <Typography
