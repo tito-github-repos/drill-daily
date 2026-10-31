@@ -78,7 +78,7 @@ const courses = [
     feeColor: "#2563eb",
     title: "Higher Education Entrance Exams",
     groups: [
-      { label: "Medical & Engineering", tags: ["NEET", "IIT-JEE"] },
+      { label: "Medical & Engineering", tags: ["NEET", "IIT-JEE", "IAT", "NEST"] },
       { label: "Design & Architecture", tags: ["NID", "NIFT", "UCEED", "NATA"] },
       { label: "Law, Management & Others", tags: ["CLAT", "IPMAT","UG - IIMB", "CUET"] },
     ],
@@ -99,8 +99,8 @@ const courses = [
     feeColor: "#7c3aed",
     title: "Abroad Education Exams",
     groups: [
-      { label: "Undergraduate", tags: ["SAT", "AP", "LSE Mathematics"] },
-      { label: "Postgraduate", tags: ["GRE", "GMAT", "LSAT"] },
+      { label: "Undergraduate", tags: ["SAT", "AP", "LSAT", "LSE Mathematics"] },
+      { label: "Postgraduate", tags: ["GRE", "GMAT", ] },
       { label: "English proficiency", tags: ["IELTS", "TOEFL"] },
     ],
     fee: "₹ 1,999 / course",
