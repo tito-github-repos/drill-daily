@@ -5,7 +5,7 @@ import Footer from "@/app/components/Footer";
 import DisableCopy from "./components/DisableCopy";
 
 export const metadata: Metadata = {
-  title: "Drill Daily",
+  title: "Drill Daily-Career Counseling Consulting",
   description: "We're here to help you succeed",
 };
 
