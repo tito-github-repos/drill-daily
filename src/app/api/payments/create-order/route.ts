@@ -113,7 +113,7 @@ export async function POST(req: Request) {
       // Keep the Razorpay order's notes in step (best effort)
       try {
         await (razorpay.orders as any).edit(existing.razorpayOrderId, {
-          notes: {site: "2212", name: studentName, email: cleanEmail, courseKey, consultDate },
+          notes: {site: "drill-daily", name: studentName, email: cleanEmail, courseKey, consultDate },
         });
       } catch {}
 
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
       amount: plan.amount,
       currency: "INR",
       receipt: `${courseKey}_${Date.now()}`,
-      notes: {site: "2212", name: studentName , email: cleanEmail, courseKey, consultDate },
+      notes: {site: "drill-daily", name: studentName , email: cleanEmail, courseKey, consultDate },
     });
 
     try {
