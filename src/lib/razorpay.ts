@@ -7,7 +7,7 @@ export const razorpay = new Razorpay({
 
 // Prices live on the server so the browser can never change the amount.
 export const COURSE_PLANS: Record<string, { name: string; amount: number }> = {
-  job: { name: "Job Exams", amount: 199900 },
+  job: { name: "Job Exams", amount: 1 },
   higher: { name: "Higher Education Entrance Exams", amount: 199900 },
   abroad: { name: "Abroad Education Exams", amount: 199900 },
 };
