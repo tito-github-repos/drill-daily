@@ -45,10 +45,10 @@ export async function POST(req: Request) {
     // Never create an order for an unregistered email
     const student = await prisma.studentRegistration.findUnique({
       where: { email: cleanEmail },
-      select: { phone: true },
+      select: { phone: true , firstName: true, lastName: true},
     });
     if (!student) return NextResponse.json({ notRegistered: true });
-
+    const studentName = `${student.firstName ?? ""} ${student.lastName ?? ""}`.trim();
     // Blank phone = use the registered one
     const phone = contactPhone ? String(contactPhone) : student.phone;
     if (!isPhone(phone)) return bad("Enter a valid 10-digit phone number.");
@@ -113,7 +113,7 @@ export async function POST(req: Request) {
       // Keep the Razorpay order's notes in step (best effort)
       try {
         await (razorpay.orders as any).edit(existing.razorpayOrderId, {
-          notes: { email: cleanEmail, courseKey, consultDate },
+          notes: {site: "2212", name: studentName, email: cleanEmail, courseKey, consultDate },
         });
       } catch {}
 
@@ -131,7 +131,7 @@ export async function POST(req: Request) {
       amount: plan.amount,
       currency: "INR",
       receipt: `${courseKey}_${Date.now()}`,
-      notes: { email: cleanEmail, courseKey, consultDate },
+      notes: {site: "2212", name: studentName , email: cleanEmail, courseKey, consultDate },
     });
 
     try {
