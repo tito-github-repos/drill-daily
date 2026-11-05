@@ -10,7 +10,7 @@ export const COURSE_CATEGORY: Record<string, string> = {
 export const subjectsFor = (courseKey: string): string[] =>
   courseOptions[COURSE_CATEGORY[courseKey]] ?? [];
 
-export const SLOT_LABEL = "11:00 AM – 1:00 PM IST";
+export const SLOT_LABEL = "05:00 PM – 7:00 PM IST";
 export const HOLD_MINUTES = 24*60;
 
 // How far ahead a consultation can be booked
