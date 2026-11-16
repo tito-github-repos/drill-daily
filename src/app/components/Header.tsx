@@ -4,18 +4,28 @@ import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Menu, X } from "lucide-react";
+import { ArrowRight, ChevronDown, Menu, X } from "lucide-react";
 
 interface NavLink {
   label: string;
   href: string;
 }
 
-const NAV_LINKS: NavLink[] = [
+// Add more classes here later (e.g. Class XII)
+const COACHING_CLASSES: (NavLink & { sub: string })[] = [
+  {
+    label: "Class XI",
+    href: "/coaching/class-xi",
+    sub: "NEET · IIT JEE · IAT · NEST · CBSE",
+  },
+];
+
+const NAV_LINKS_BEFORE: NavLink[] = [
   { label: "Home", href: "/" },
   { label: "My Classes", href: "/my-classes" },
-  { label: "Contact", href: "/contact" },
 ];
+
+const NAV_LINKS_AFTER: NavLink[] = [{ label: "Contact", href: "/contact" }];
 
 export default function Header() {
   const pathname = usePathname();
@@ -25,6 +35,7 @@ export default function Header() {
   const [hoveredLink, setHoveredLink] = useState<string | null>(null);
   const [ctaHover, setCtaHover] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [coachingOpen, setCoachingOpen] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia("(max-width: 900px)");
@@ -197,63 +208,188 @@ export default function Header() {
     },
   };
 
+  /* ---------- shared link look (used by normal links + Coaching button) ---------- */
+
+  const getLinkStyle = (isActive: boolean, isHovered: boolean): CSSProperties => ({
+    display: "flex",
+    flexDirection: "column",
+    alignItems: isMobile ? "flex-start" : "center",
+    justifyContent: "center",
+    position: "relative",
+    padding: isMobile ? "12px 14px" : "8px 13px",
+    borderRadius: "8px",
+    fontSize: isMobile ? "15px" : "13.5px",
+    fontWeight: isActive ? 700 : 600,
+    color: isActive ? "var(--primary)" : "#374151",
+    textAlign: isMobile ? "left" : "center",
+    background:
+      isHovered && !isActive
+        ? "var(--primary-light)"
+        : isMobile && isActive
+          ? "var(--primary-light)"
+          : "transparent",
+    transition: "all .25s cubic-bezier(.4,0,.2,1)",
+    alignSelf: "stretch",
+    width: isMobile ? "100%" : "auto",
+  });
+
+  const getUnderlineStyle = (isActive: boolean): CSSProperties => ({
+    position: "absolute",
+    bottom: "1px",
+    left: "50%",
+    transform: "translateX(-50%)",
+    width: isActive ? "14px" : "0",
+    height: "2px",
+    borderRadius: "999px",
+    background: "var(--primary)",
+    transition: "all .3s ease",
+    opacity: isMobile ? 0 : 1,
+  });
+
+  const closeAll = () => {
+    setMenuOpen(false);
+    setCoachingOpen(false);
+  };
+
   const NavLinkItem = ({ link }: { link: NavLink }) => {
     const isActive = pathname === link.href;
     const isHovered = hoveredLink === link.href;
 
-    const linkStyle: CSSProperties = {
-      display: "flex",
-      flexDirection: "column",
-      alignItems: isMobile ? "flex-start" : "center",
-      justifyContent: "center",
-      position: "relative",
-      padding: isMobile ? "12px 14px" : "8px 13px",
-      borderRadius: "8px",
-      fontSize: isMobile ? "15px" : "13.5px",
-      fontWeight: isActive ? 700 : 600,
-      color: isActive ? "var(--primary)" : "#374151",
-      textAlign: isMobile ? "left" : "center",
-      background:
-        isHovered && !isActive
-          ? "var(--primary-light)"
-          : isMobile && isActive
-            ? "var(--primary-light)"
-            : "transparent",
-      transition: "all .25s cubic-bezier(.4,0,.2,1)",
-      alignSelf: "stretch",
-      width: isMobile ? "100%" : "auto",
-    };
-
-    const underlineStyle: CSSProperties = {
-      position: "absolute",
-      bottom: "1px",
-      left: "50%",
-      transform: "translateX(-50%)",
-      width: isActive ? "14px" : "0",
-      height: "2px",
-      borderRadius: "999px",
-      background: "var(--primary)",
-      transition: "all .3s ease",
-      opacity: isMobile ? 0 : 1,
-    };
-
     return (
       <Link
         href={link.href}
-        style={linkStyle}
+        style={getLinkStyle(isActive, isHovered)}
         onMouseEnter={() => setHoveredLink(link.href)}
         onMouseLeave={() => setHoveredLink(null)}
-        onClick={() => setMenuOpen(false)}
+        onClick={closeAll}
       >
         {link.label}
-        {!isMobile && <span style={underlineStyle} />}
+        {!isMobile && <span style={getUnderlineStyle(isActive)} />}
       </Link>
     );
   };
 
+  /* ---------- Coaching dropdown ---------- */
+
+  const coachingActive = pathname.startsWith("/coaching");
+
+  const CoachingMenu = () => (
+    <div
+      style={{
+        position: "relative",
+        alignSelf: isMobile ? "stretch" : "auto",
+        display: "flex",
+        flexDirection: "column",
+      }}
+      onMouseEnter={() => !isMobile && setCoachingOpen(true)}
+      onMouseLeave={() => !isMobile && setCoachingOpen(false)}
+    >
+      <button
+        type="button"
+        aria-haspopup="true"
+        aria-expanded={coachingOpen}
+        onClick={() => setCoachingOpen((o) => !o)}
+        style={{
+          ...getLinkStyle(coachingActive, coachingOpen),
+          flexDirection: "row",
+          gap: "4px",
+          border: "none",
+          cursor: "pointer",
+          fontFamily: "inherit",
+          justifyContent: isMobile ? "space-between" : "center",
+          alignItems: "center",
+          background:
+            coachingOpen && !coachingActive
+              ? "var(--primary-light)"
+              : isMobile && coachingActive
+                ? "var(--primary-light)"
+                : "transparent",
+        }}
+      >
+        Coaching
+        <ChevronDown
+          size={14}
+          strokeWidth={2.4}
+          style={{
+            transition: "transform .25s ease",
+            transform: coachingOpen ? "rotate(180deg)" : "rotate(0deg)",
+          }}
+        />
+        {!isMobile && <span style={getUnderlineStyle(coachingActive)} />}
+      </button>
+
+      {coachingOpen && (
+        <div
+          style={
+            isMobile
+              ? { padding: "2px 0 6px 12px" }
+              : {
+                  position: "absolute",
+                  top: "100%",
+                  left: "50%",
+                  transform: "translateX(-50%)",
+                  paddingTop: "6px", // hover bridge so the menu doesn't close
+                  zIndex: 1000,
+                }
+          }
+        >
+          <div
+            style={
+              isMobile
+                ? {}
+                : {
+                    background: "#fff",
+                    borderRadius: "12px",
+                    border: "1px solid rgba(15,23,42,0.06)",
+                    boxShadow: "0 16px 36px -12px rgba(15,23,42,0.18)",
+                    minWidth: "210px",
+                    padding: "6px",
+                  }
+            }
+          >
+            {COACHING_CLASSES.map((c) => {
+              const isActive = pathname === c.href;
+              const isHovered = hoveredLink === c.href;
+              return (
+                <Link
+                  key={c.href}
+                  href={c.href}
+                  onMouseEnter={() => setHoveredLink(c.href)}
+                  onMouseLeave={() => setHoveredLink(null)}
+                  onClick={closeAll}
+                  style={{
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "2px",
+                    padding: "10px 14px",
+                    borderRadius: "8px",
+                    background:
+                      isHovered || isActive ? "var(--primary-light)" : "transparent",
+                    color: isActive || isHovered ? "var(--primary)" : "#374151",
+                    fontSize: isMobile ? "14.5px" : "13.5px",
+                    fontWeight: 700,
+                    transition: "all .2s ease",
+                    whiteSpace: "nowrap",
+                  }}
+                >
+                  {c.label}
+                  <span
+                    style={{ fontSize: "11px", fontWeight: 500, color: "#6b7280" }}
+                  >
+                    {c.sub}
+                  </span>
+                </Link>
+              );
+            })}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+
   return (
     <>
-      <div style={styles.overlay} onClick={() => setMenuOpen(false)} />
+      <div style={styles.overlay} onClick={closeAll} />
 
       <header style={styles.header}>
         <div style={styles.container}>
@@ -274,13 +410,19 @@ export default function Header() {
           <nav style={styles.nav}>
             <button
               style={styles.closeBtn}
-              onClick={() => setMenuOpen(false)}
+              onClick={closeAll}
               aria-label="Close Menu"
             >
               <X size={16} />
             </button>
 
-            {NAV_LINKS.map((link) => (
+            {NAV_LINKS_BEFORE.map((link) => (
+              <NavLinkItem key={link.href} link={link} />
+            ))}
+
+            <CoachingMenu />
+
+            {NAV_LINKS_AFTER.map((link) => (
               <NavLinkItem key={link.href} link={link} />
             ))}
 
@@ -291,11 +433,13 @@ export default function Header() {
                 onMouseEnter={() => setCtaHover(true)}
                 onMouseLeave={() => setCtaHover(false)}
                 onClick={(e) => {
-                    setMenuOpen(false);
-                    if (pathname === "/") {
-                        e.preventDefault();
-                        document.getElementById("register-form")?.scrollIntoView({ behavior: "smooth" });
-                    }
+                  closeAll();
+                  if (pathname === "/") {
+                    e.preventDefault();
+                    document
+                      .getElementById("register-form")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }
                 }}
               >
                 Register
@@ -310,7 +454,7 @@ export default function Header() {
 
           <button
             style={styles.menuToggle}
-            onClick={() => setMenuOpen(!menuOpen)}
+            onClick={() => (menuOpen ? closeAll() : setMenuOpen(true))}
             aria-label="Toggle Menu"
           >
             {menuOpen ? <X size={18} /> : <Menu size={18} />}
