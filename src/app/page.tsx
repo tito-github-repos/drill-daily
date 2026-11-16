@@ -4,6 +4,7 @@ import Hero from "@/app/components/home/Hero";
 import RegistrationForm from "@/app/components/home/RegistrationForm";
 import WhyDrillDailyExists from "@/app/components/home/WhyDrillDailyExists";
 import PromoPopup from "@/app/components/home/PromoPopup";
+import AdmissionBanner from "@/app/components/home/AdmissionBanner";
 
 export default function Home() {
   return (
@@ -12,6 +13,7 @@ export default function Home() {
       <Hero />
       <WhyDrillDailyExists />
       <CoursesOffered />
+      <AdmissionBanner />
       <ClassTypesSection />
       <RegistrationForm />
     </main>
