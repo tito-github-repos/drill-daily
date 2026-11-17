@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Box, Button, Typography } from "@mui/material";
 
 const FACTS = [
+  "Class X · Maths & Science",
   "Class XI · NEET · IIT JEE · IAT · NEST · CBSE Board",
   "Only 20 seats · First come, first served",
   "Admission closes 31 March 2027",
@@ -50,7 +51,7 @@ export default function AdmissionBanner(): React.JSX.Element {
               mb: 1.75,
             }}
           >
-            Coaching for Class XI · 2027
+            Coaching for Class X &amp; XI · 2027
           </Typography>
           <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
             {FACTS.map((f) => (
@@ -100,7 +101,7 @@ export default function AdmissionBanner(): React.JSX.Element {
           </Button>
           <Button
             component={Link}
-            href="/coaching/class-xi#admission"
+            href="/coaching"
             sx={{
               color: "#ffffff",
               fontWeight: 700,
@@ -112,7 +113,7 @@ export default function AdmissionBanner(): React.JSX.Element {
               "&:hover": { background: "rgba(255,255,255,0.12)" },
             }}
           >
-            View admission details
+            View class details
           </Button>
         </Box>
       </Box>

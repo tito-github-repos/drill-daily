@@ -14,6 +14,11 @@ interface NavLink {
 // Add more classes here later (e.g. Class XII)
 const COACHING_CLASSES: (NavLink & { sub: string })[] = [
   {
+    label: "Class X",
+    href: "/coaching/class-x",
+    sub: "Maths & Science",
+  },
+  {
     label: "Class XI",
     href: "/coaching/class-xi",
     sub: "NEET · IIT JEE · IAT · NEST · CBSE",
