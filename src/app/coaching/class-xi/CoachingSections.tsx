@@ -4,23 +4,23 @@ import { Box, Typography, SvgIconProps } from "@mui/material";
 import type { SxProps, Theme } from "@mui/material";
 import WbSunnyOutlinedIcon from "@mui/icons-material/WbSunnyOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
+import BeachAccessOutlinedIcon from "@mui/icons-material/BeachAccessOutlined";
 import ScheduleOutlinedIcon from "@mui/icons-material/ScheduleOutlined";
 import VideocamOutlinedIcon from "@mui/icons-material/VideocamOutlined";
-import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
-import EventBusyOutlinedIcon from "@mui/icons-material/EventBusyOutlined";
-import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
 import WorkspacePremiumOutlinedIcon from "@mui/icons-material/WorkspacePremiumOutlined";
+import BlockOutlinedIcon from "@mui/icons-material/BlockOutlined";
+import EventAvailableOutlinedIcon from "@mui/icons-material/EventAvailableOutlined";
 import QuizOutlinedIcon from "@mui/icons-material/QuizOutlined";
 import PaymentsOutlinedIcon from "@mui/icons-material/PaymentsOutlined";
 import RocketLaunchOutlinedIcon from "@mui/icons-material/RocketLaunchOutlined";
 import GroupsOutlinedIcon from "@mui/icons-material/GroupsOutlined";
 import CheckCircleRoundedIcon from "@mui/icons-material/CheckCircleRounded";
+import type { ClassCoachingData, Tone, RowKind } from "../coachingData";
 
 type IconComponent = React.ComponentType<SvgIconProps>;
+type Props = { data: ClassCoachingData };
 
-/* =========================================================
-   Shared styles (MUI sx)
-   ========================================================= */
+/* ---------- shared styles ---------- */
 
 const sectionSx: SxProps<Theme> = {
   width: "100%",
@@ -36,33 +36,6 @@ const outerCardSx: SxProps<Theme> = {
   background: "linear-gradient(180deg, #fafcfb 0%, #f5f8fb 100%)",
   border: "1px solid #edf2f7",
 };
-
-const headerSx: SxProps<Theme> = {
-  display: "flex",
-  alignItems: "center",
-  gap: 1.5,
-  mb: 2.75,
-};
-
-const headerIconSx: SxProps<Theme> = {
-  width: 34,
-  height: 34,
-  borderRadius: "50%",
-  background: "#e8f9ef",
-  color: "#16a34a",
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  flexShrink: 0,
-};
-
-const headingSx: SxProps<Theme> = {
-  fontSize: { xs: "1.25rem", sm: "1.5rem" },
-  fontWeight: 800,
-  color: "#0f172a",
-};
-
-const subheadingSx: SxProps<Theme> = { color: "#64748b", fontSize: "0.94rem" };
 
 const chipSx: SxProps<Theme> = {
   background: "#ffffff",
@@ -85,41 +58,57 @@ function SectionHeader({
   subtitle: string;
 }) {
   return (
-    <Box sx={headerSx}>
-      <Box sx={headerIconSx}>
+    <Box sx={{ display: "flex", alignItems: "center", gap: 1.5, mb: 2.75 }}>
+      <Box
+        sx={{
+          width: 34,
+          height: 34,
+          borderRadius: "50%",
+          background: "#e8f9ef",
+          color: "#16a34a",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          flexShrink: 0,
+        }}
+      >
         <Icon sx={{ fontSize: 22 }} />
       </Box>
       <Box>
-        <Typography sx={headingSx}>{title}</Typography>
-        <Typography sx={subheadingSx}>{subtitle}</Typography>
+        <Typography
+          sx={{ fontSize: { xs: "1.25rem", sm: "1.5rem" }, fontWeight: 800, color: "#0f172a" }}
+        >
+          {title}
+        </Typography>
+        <Typography sx={{ color: "#64748b", fontSize: "0.94rem" }}>
+          {subtitle}
+        </Typography>
       </Box>
     </Box>
   );
 }
 
 /* =========================================================
-   1. WEEKLY TIMETABLE  (place after Class Structure)
+   1. WEEKLY TIMETABLE
    ========================================================= */
 
-const TIMETABLE: {
-  day: string;
-  morning: string;
-  evening?: string; // omit when morning and evening are the same (spans both)
-  test?: boolean;
-}[] = [
-  { day: "Mon – Wed", morning: "Maths", evening: "Biology" },
-  { day: "Thu – Sat", morning: "Physics", evening: "Chemistry" },
-  {
-    day: "Three Sundays a month",
-    morning: "Weekly Tests · MCQs · Competitive Exams",
-    test: true,
-  },
-  {
-    day: "Last Sunday of the month",
-    morning: "Monthly Tests · Descriptive · Board Exams",
-    test: true,
-  },
-];
+const TONES: Record<Tone, { bg: string; color: string }> = {
+  orange: { bg: "rgba(217,119,6,0.1)", color: "#b45309" },
+  blue: { bg: "rgba(37,99,235,0.08)", color: "#2563eb" },
+  purple: { bg: "rgba(147,51,234,0.08)", color: "#7e22ce" },
+};
+
+const COL_ICONS = {
+  sun: WbSunnyOutlinedIcon,
+  moon: DarkModeOutlinedIcon,
+  vacation: BeachAccessOutlinedIcon,
+};
+
+const KIND_STYLE: Record<RowKind, object> = {
+  class: {},
+  test: { background: "rgba(30,184,90,0.08)", color: "#15803d" },
+  off: { background: "#f1f5f9", color: "#64748b" },
+};
 
 const ttCellSx: SxProps<Theme> = {
   display: "flex",
@@ -134,60 +123,81 @@ const ttCellSx: SxProps<Theme> = {
   color: "#0f172a",
 };
 
-const ttHeadSx: SxProps<Theme> = {
-  ...(ttCellSx as object),
-  minHeight: 0,
-  gap: 1.25,
-  fontWeight: 800,
-  fontSize: { xs: "0.8rem", sm: "0.95rem" },
-  border: "none",
-};
-
-export function CoachingTimetable(): React.JSX.Element {
+export function CoachingTimetable({ data }: Props): React.JSX.Element {
+  const n = data.columns.length;
   return (
-    <Box component="section" sx={{ ...(sectionSx as object), pt: { xs: 3, md: 5 } }}>
+    <Box component="section" sx={sectionSx}>
+      <Box sx={{ textAlign: "center", maxWidth: 760, mx: "auto", mb: 4, pt: 1 }}>
+        <Typography
+          sx={{ color: "#16a34a", fontWeight: 700, letterSpacing: "2px", fontSize: "0.85rem" }}
+        >
+          COACHING FOR {data.label.toUpperCase()} · 2027
+        </Typography>
+        <Typography
+          component="h2"
+          sx={{ mt: 1.25, fontSize: { xs: "1.7rem", sm: "2.35rem" }, fontWeight: 800, color: "#0f172a" }}
+        >
+          Drill Daily Coaching · {data.label}
+        </Typography>
+        <Box sx={{ width: 70, height: 4, mx: "auto", mt: 2.25, background: "#16a34a", borderRadius: "50px" }} />
+      </Box>
+
       <Box sx={outerCardSx}>
         <SectionHeader
           icon={ScheduleOutlinedIcon}
           title="Weekly Timetable"
-          subtitle="Two focused sessions every day, Monday to Saturday. Tests on Sundays."
+          subtitle={data.timetableSubtitle}
         />
 
         <Box
           sx={{
             display: "grid",
-            gridTemplateColumns: { xs: "1fr 1fr", md: "230px 1fr 1fr" },
+            gridTemplateColumns: { xs: `repeat(${n}, 1fr)`, md: `230px repeat(${n}, 1fr)` },
             gap: { xs: 1, sm: 1.5 },
           }}
         >
           <Box
             sx={{
-              ...(ttHeadSx as object),
+              ...(ttCellSx as object),
               display: { xs: "none", md: "flex" },
+              minHeight: 0,
               background: "#0f172a",
               color: "#ffffff",
+              border: "none",
+              fontWeight: 800,
             }}
           >
             Days
           </Box>
-          <Box sx={{ ...(ttHeadSx as object), background: "rgba(217,119,6,0.1)", color: "#d97706" }}>
-            <WbSunnyOutlinedIcon sx={{ fontSize: 20 }} />
-            <span>Morning · 5:00 AM – 6:30 AM</span>
-          </Box>
-          <Box sx={{ ...(ttHeadSx as object), background: "rgba(37,99,235,0.08)", color: "#2563eb" }}>
-            <DarkModeOutlinedIcon sx={{ fontSize: 20 }} />
-            <span>Evening · 6:30 PM – 8:00 PM</span>
-          </Box>
-
-          {TIMETABLE.map((row) => {
-            const slotSx = row.test
-              ? {
+          {data.columns.map((c) => {
+            const Icon = COL_ICONS[c.icon];
+            return (
+              <Box
+                key={c.title}
+                sx={{
                   ...(ttCellSx as object),
-                  background: "rgba(30,184,90,0.08)",
-                  color: "#15803d",
-                  fontSize: { xs: "0.85rem", sm: "0.95rem" },
-                }
-              : ttCellSx;
+                  minHeight: 0,
+                  gap: 1.25,
+                  border: "none",
+                  fontWeight: 800,
+                  fontSize: { xs: "0.8rem", sm: "0.95rem" },
+                  background: TONES[c.tone].bg,
+                  color: TONES[c.tone].color,
+                }}
+              >
+                <Icon sx={{ fontSize: 20 }} />
+                <span>
+                  {c.title} · {c.time}
+                </span>
+              </Box>
+            );
+          })}
+
+          {data.rows.map((row) => {
+            const slotSx = {
+              ...(ttCellSx as object),
+              ...KIND_STYLE[row.kind ?? "class"],
+            };
             return (
               <React.Fragment key={row.day}>
                 <Box
@@ -215,34 +225,16 @@ export function CoachingTimetable(): React.JSX.Element {
                   </Box>
                 </Box>
 
-                {row.evening ? (
-                  <>
-                    <Box sx={slotSx}>{row.morning}</Box>
-                    <Box sx={slotSx}>{row.evening}</Box>
-                  </>
-                ) : (
-                  <Box
-                    sx={{
-                      ...(slotSx as object),
-                      gridColumn: "span 2",
-                      justifyContent: "center",
-                      textAlign: "center",
-                    }}
-                  >
-                    {row.morning}
-                    <Box
-                      component="span"
-                      sx={{
-                        ml: 1.25,
-                        fontSize: "0.8rem",
-                        fontWeight: 500,
-                        opacity: 0.8,
-                        display: { xs: "none", sm: "inline" },
-                      }}
-                    >
-                      (both sessions)
-                    </Box>
+                {row.span ? (
+                  <Box sx={{ ...slotSx, gridColumn: `span ${n}`, justifyContent: "center", textAlign: "center" }}>
+                    {row.span}
                   </Box>
+                ) : (
+                  row.cells?.map((cell, i) => (
+                    <Box key={i} sx={slotSx}>
+                      {cell}
+                    </Box>
+                  ))
                 )}
               </React.Fragment>
             );
@@ -254,14 +246,10 @@ export function CoachingTimetable(): React.JSX.Element {
 }
 
 /* =========================================================
-   2. OUR COACHES  (place after Our Class Experience)
+   2. OUR COACHES
    ========================================================= */
 
-const COACH_TAGS = [
-  "Premier Institutions",
-  "Doctorates",
-  "Teaching Excellence Awardees",
-];
+const COACH_TAGS = ["Premier Institutions", "Doctorates", "Teaching Excellence Awardees"];
 
 export function OurCoaches(): React.JSX.Element {
   return (
@@ -313,57 +301,38 @@ export function OurCoaches(): React.JSX.Element {
 }
 
 /* =========================================================
-   CLASS INSTRUCTIONS  (place after Our Coaches)
+   3. CLASS RULES
    ========================================================= */
 
-interface RuleItem {
+function RuleList({
+  title,
+  items,
+  icon: Icon,
+}: {
+  title: string;
+  items: string[];
   icon: IconComponent;
-  text: string;
-}
-
-const SCHEDULE_RULES: RuleItem[] = [
-  { icon: EventAvailableOutlinedIcon, text: "Portions will be completed by October." },
-  { icon: QuizOutlinedIcon, text: "Only tests and discussion from November to January." },
-  { icon: EventBusyOutlinedIcon, text: "No sessions in February and March." },
-];
-
-const POLICY_RULES: RuleItem[] = [
-  { icon: BlockOutlinedIcon, text: "No repetition of classes." },
-  { icon: BlockOutlinedIcon, text: "If a teacher cannot take a class, there is no compensation class." },
-  { icon: BlockOutlinedIcon, text: "No vacations and no holidays." },
-];
-
-function RuleList({ title, items }: { title: string; items: RuleItem[] }) {
+}) {
   return (
-    <Box
-      sx={{
-        background: "#ffffff",
-        border: "1px solid #edf2f7",
-        borderRadius: "16px",
-        p: "20px 22px",
-      }}
-    >
+    <Box sx={{ background: "#ffffff", border: "1px solid #edf2f7", borderRadius: "16px", p: "20px 22px" }}>
       <Typography sx={{ fontSize: "1rem", fontWeight: 800, color: "#0f172a", mb: 1.75 }}>
         {title}
       </Typography>
       <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}>
-        {items.map((r) => {
-          const Icon = r.icon;
-          return (
-            <Box key={r.text} sx={{ display: "flex", alignItems: "flex-start", gap: 1.25 }}>
-              <Icon sx={{ fontSize: 20, color: "#16a34a", flexShrink: 0, mt: "1px" }} />
-              <Typography sx={{ fontSize: "0.9rem", color: "#334155", lineHeight: 1.5 }}>
-                {r.text}
-              </Typography>
-            </Box>
-          );
-        })}
+        {items.map((text) => (
+          <Box key={text} sx={{ display: "flex", alignItems: "flex-start", gap: 1.25 }}>
+            <Icon sx={{ fontSize: 20, color: "#16a34a", flexShrink: 0, mt: "1px" }} />
+            <Typography sx={{ fontSize: "0.9rem", color: "#334155", lineHeight: 1.5 }}>
+              {text}
+            </Typography>
+          </Box>
+        ))}
       </Box>
     </Box>
   );
 }
 
-export function ClassRules(): React.JSX.Element {
+export function ClassRules({ data }: Props): React.JSX.Element {
   return (
     <Box component="section" sx={sectionSx}>
       <Box sx={outerCardSx}>
@@ -396,15 +365,9 @@ export function ClassRules(): React.JSX.Element {
           </Box>
         </Box>
 
-        <Box
-          sx={{
-            display: "grid",
-            gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
-            gap: 2.5,
-          }}
-        >
-          <RuleList title="Schedule" items={SCHEDULE_RULES} />
-          <RuleList title="Policies" items={POLICY_RULES} />
+        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2.5 }}>
+          <RuleList title="Schedule" items={data.scheduleRules} icon={EventAvailableOutlinedIcon} />
+          <RuleList title="Policies" items={data.policyRules} icon={BlockOutlinedIcon} />
         </Box>
       </Box>
     </Box>
@@ -412,7 +375,7 @@ export function ClassRules(): React.JSX.Element {
 }
 
 /* =========================================================
-   4. ADMISSION  (place just above Who Can Join / How to Join)
+   4. ADMISSION
    ========================================================= */
 
 const ADMISSION_STEPS: {
@@ -427,19 +390,9 @@ const ADMISSION_STEPS: {
     text: "Only qualifiers are eligible to pay the fees and join the classes.",
     link: true,
   },
-  {
-    icon: PaymentsOutlinedIcon,
-    title: "Pay the Fees",
-    text: "Single payment, before 31 March 2027.",
-  },
-  {
-    icon: RocketLaunchOutlinedIcon,
-    title: "Classes Begin",
-    text: "Classes start on 1 April 2027.",
-  },
+  { icon: PaymentsOutlinedIcon, title: "Pay the Fees", text: "Single payment, before 31 March 2027." },
+  { icon: RocketLaunchOutlinedIcon, title: "Classes Begin", text: "Classes start on 1 April 2027." },
 ];
-
-const EXAMS = ["NEET", "IIT JEE", "IAT", "NEST", "CBSE Board Exams"];
 
 const SIDE_POINTS = [
   "Only 20 students",
@@ -448,14 +401,14 @@ const SIDE_POINTS = [
   "Affordable, scholarship-inclusive fees for all three subjects",
 ];
 
-export function AdmissionSection(): React.JSX.Element {
+export function AdmissionSection({ data }: Props): React.JSX.Element {
   return (
     <Box component="section" id="admission" sx={sectionSx}>
       <Box sx={outerCardSx}>
         <SectionHeader
           icon={GroupsOutlinedIcon}
           title="Admission to Drill Daily Coaching Classes"
-          subtitle="Class XI · Covers NEET, IIT JEE, IAT, NEST and CBSE Board Exams."
+          subtitle={data.admissionSubtitle}
         />
 
         <Box
@@ -564,33 +517,26 @@ export function AdmissionSection(): React.JSX.Element {
               {SIDE_POINTS.map((t) => (
                 <Box
                   key={t}
-                  sx={{
-                    display: "flex",
-                    alignItems: "flex-start",
-                    gap: 1,
-                    fontSize: "0.9rem",
-                    fontWeight: 500,
-                    color: "#334155",
-                  }}
+                  sx={{ display: "flex", alignItems: "flex-start", gap: 1, fontSize: "0.9rem", fontWeight: 500, color: "#334155" }}
                 >
-                  <CheckCircleRoundedIcon
-                    sx={{ fontSize: 18, color: "#2563eb", flexShrink: 0, mt: "2px" }}
-                  />
+                  <CheckCircleRoundedIcon sx={{ fontSize: 18, color: "#2563eb", flexShrink: 0, mt: "2px" }} />
                   <span>{t}</span>
                 </Box>
               ))}
             </Box>
-            <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
-              {EXAMS.map((e) => (
-                <Box
-                  key={e}
-                  component="span"
-                  sx={{ ...(chipSx as object), borderColor: "rgba(37,99,235,0.2)", color: "#2563eb" }}
-                >
-                  {e}
-                </Box>
-              ))}
-            </Box>
+            {data.examChips.length > 0 && (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 1 }}>
+                {data.examChips.map((e) => (
+                  <Box
+                    key={e}
+                    component="span"
+                    sx={{ ...(chipSx as object), borderColor: "rgba(37,99,235,0.2)", color: "#2563eb" }}
+                  >
+                    {e}
+                  </Box>
+                ))}
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>
