@@ -61,7 +61,7 @@ const courses = [
       { label: "Defence and Uniform Services", tags: ["NDA", "AFCAT", "CDSE", "CAPF"] },
       { label: "Banking, Insurance & Railways", tags: ["RBI", "SBI", "IBPS","Insurance","RRB"] },
     ],
-    fee: "₹ 1,999 / course",
+    fee: "₹ 1,999",
   },
   {
     key: "higher",
@@ -82,7 +82,7 @@ const courses = [
       { label: "Design & Architecture", tags: ["NID", "NIFT", "UCEED", "NATA"] },
       { label: "Law, Management & Others", tags: ["CLAT", "IPMAT","UG - IIMB", "CUET"] },
     ],
-    fee: "₹ 1,999 / course",
+    fee: "₹ 1,999",
   },
   {
     key: "abroad",
@@ -103,7 +103,7 @@ const courses = [
       { label: "Postgraduate", tags: ["GRE", "GMAT", ] },
       { label: "English proficiency", tags: ["IELTS", "TOEFL"] },
     ],
-    fee: "₹ 1,999 / course",
+    fee: "₹ 1,999",
   },
 ];
 
@@ -663,7 +663,7 @@ export default function CoursesOffered() {
 
               <Box sx={{ textAlign: "center", mb: 2 }}>
                 <Typography variant="caption" color="text.secondary" sx={{ display: "block", fontWeight: 700 }}>
-                  Consulting Fee
+                  Career Counseling Consulting Fee 
                 </Typography>
                 <Typography variant="subtitle1" sx={{ fontWeight: 700, color: c.feeColor }}>
                   {c.fee}
