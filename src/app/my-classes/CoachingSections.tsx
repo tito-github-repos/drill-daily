@@ -559,7 +559,7 @@ export function AdmissionSection(): React.JSX.Element {
                     {s.link && (
                       <Box
                         component="a"
-                        href="https://www.2212.co.in"
+                        href="https://www.2212.co.in/#banner-worksheet-paid"
                         target="_blank"
                         rel="noopener noreferrer"
                         sx={{
