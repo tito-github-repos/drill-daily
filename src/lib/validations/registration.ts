@@ -4,13 +4,13 @@ import sanitizeHtml from "sanitize-html";
 export const courseOptions: Record<string, string[]> = {
   "job-exams": [
     "UPSC",
+    "TNPSC",
     "SSC",
     "RBI",
     "NDA",
     "AFCAT",
     "CDSE",
     "CAPF",
-    "RBI",
     "SBI",
     "IBPS",
     "Insurance",
