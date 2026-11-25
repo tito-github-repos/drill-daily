@@ -57,7 +57,7 @@ const courses = [
     feeColor: "var(--primary)",
     title: "Government Service Exams",
     groups: [
-      { label: "Civil Services & Central Government", tags: ["UPSC", "SSC"] },
+      { label: "Civil Services & Central Government", tags: ["UPSC","TNPSC", "SSC"] },
       { label: "Defence and Uniform Services", tags: ["NDA", "AFCAT", "CDSE", "CAPF"] },
       { label: "Banking, Insurance & Railways", tags: ["RBI", "SBI", "IBPS","Insurance","RRB"] },
     ],
